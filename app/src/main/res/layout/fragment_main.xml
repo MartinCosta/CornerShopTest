@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="viewmodel"
+            type="com.cornershop.counterstest.viewModel.MainViewModel" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include layout="@layout/search_bar"
+            android:id="@+id/searchBar"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+
+        <ProgressBar
+            style="@style/Widget.AppCompat.ProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:indeterminateTintMode="src_atop"
+            android:indeterminateTint="@color/orange"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <TextView
+            android:id="@+id/noCountersTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.AppCompat.Large"
+            android:text="@string/no_counters"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <TextView
+            android:id="@+id/noCountersDescription"
+            style="@style/TextAppearance.AppCompat.Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal_1"
+            android:layout_marginStart="@dimen/margin_normal_3"
+            android:layout_marginEnd="@dimen/margin_normal_3"
+            android:text="@string/no_counters_phrase"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toTopOf="@+id/noCountersTitle"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/noCountersTitle"
+            app:layout_constraintVertical_bias="0.0" />
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.Button.Icon"
+            app:icon="@drawable/ic_plus"
+            app:iconTint="?attr/colorSecondary"
+            android:layout_marginBottom="@dimen/margin_normal_2"
+            android:text="@string/add_counters"
+            app:cornerRadius="@dimen/margin_normal_3"
+            android:textColor="?attr/colorSecondary"
+            android:paddingBottom="@dimen/margin_normal_1"
+            android:paddingTop="@dimen/margin_normal_1"
+            android:paddingStart="@dimen/margin_normal_2"
+            android:paddingEnd="@dimen/margin_normal_2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

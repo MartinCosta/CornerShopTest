@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="?android:attr/actionBarSize"
+    android:layout_marginStart="@dimen/margin_normal_1"
+    android:layout_marginEnd="@dimen/margin_normal_1"
+    android:layout_marginBottom="4dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imgToolbarSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_normal_2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_search" />
+
+        <ImageView
+            android:background="@null"
+            android:id="@+id/searchBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            app:tint="@color/black"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_baseline_arrow_back_24" />
+
+        <EditText
+            android:singleLine="true"
+            style="@style/TextAppearance.AppCompat.Medium"
+            android:id="@+id/txtToolbarSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_normal_1"
+            android:layout_marginTop="@dimen/margin_normal_1"
+            android:background="@android:color/transparent"
+            android:hint="@string/search_counters"          
+            app:layout_constraintStart_toEndOf="@+id/imgToolbarSearch"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imgCloseToolbarSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal_2"
+            android:layout_marginEnd="@dimen/margin_normal_1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_close"
+            app:tint="@color/black"
+            android:visibility="gone"
+            tools:visibility="visible"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>
+

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.cornershop.counterstest.databinding.FragmentWelcomeBinding
 
 class WelcomeFragment: Fragment() {
@@ -17,11 +18,22 @@ class WelcomeFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        setListeners()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         viewDataBinding = null
+    }
+
+    private fun setListeners() {
+        viewDataBinding?.welcomeLayout?.buttonStart?.setOnClickListener {
+            navigateToMasterDetail()
+        }
+    }
+
+    private fun navigateToMasterDetail() {
+        val action = WelcomeFragmentDirections.actionToDetailFragment()
+        findNavController().navigate(action)
     }
 }

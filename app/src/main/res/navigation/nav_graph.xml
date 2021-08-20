@@ -9,5 +9,19 @@
         android:id="@+id/welcomeFragment"
         android:name="com.cornershop.counterstest.ui.WelcomeFragment"
         tools:layout="@layout/fragment_welcome">
+
+        <action
+            android:id="@+id/actionToDetailFragment"
+            app:enterAnim="@anim/slide_in_right_anim"
+            app:exitAnim="@anim/slide_out_left_anim"
+            app:popEnterAnim="@anim/slide_in_left_anim"
+            app:popExitAnim="@anim/slide_out_right_anim"
+            app:destination="@id/MainFragment"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/MainFragment"
+        android:name="com.cornershop.counterstest.ui.MainFragment"
+        tools:layout="@layout/fragment_main">
     </fragment>
 </navigation>
