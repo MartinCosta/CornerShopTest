@@ -12,7 +12,12 @@
         android:layout_height="match_parent">
 
         <include layout="@layout/search_bar"
+            android:layout_width="match_parent"
+            android:layout_height="?android:attr/actionBarSize"
             android:id="@+id/searchBar"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="@dimen/margin_normal_1"
+            android:layout_marginEnd="@dimen/margin_normal_1"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -58,7 +63,7 @@
 
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonStart"
+            android:id="@+id/buttonAddCounter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.Button.Icon"

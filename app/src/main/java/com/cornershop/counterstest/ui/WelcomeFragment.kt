@@ -28,12 +28,12 @@ class WelcomeFragment: Fragment() {
 
     private fun setListeners() {
         viewDataBinding?.welcomeLayout?.buttonStart?.setOnClickListener {
-            navigateToMasterDetail()
+            navigateToMainFragment()
         }
     }
 
-    private fun navigateToMasterDetail() {
-        val action = WelcomeFragmentDirections.actionToDetailFragment()
+    private fun navigateToMainFragment() {
+        val action = WelcomeFragmentDirections.actionToMainFragment()
         findNavController().navigate(action)
     }
 }

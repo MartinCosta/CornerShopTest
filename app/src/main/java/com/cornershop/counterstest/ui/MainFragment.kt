@@ -5,13 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.cornershop.counterstest.databinding.FragmentMainBinding
 import com.cornershop.counterstest.viewModel.MainViewModel
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.android.viewmodel.ext.android.sharedViewModel
 
 class MainFragment: Fragment() {
 
-    private val viewModel: MainViewModel by viewModel()
+    private val viewModel: MainViewModel by sharedViewModel()
     private var viewDataBinding: FragmentMainBinding? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -24,6 +25,15 @@ class MainFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewDataBinding?.buttonAddCounter?.setOnClickListener {
+            navigateToAddCounter()
+        }
+
+    }
+
+    private fun navigateToAddCounter() {
+        val action = MainFragmentDirections.actionToAddCounterFragment()
+        findNavController().navigate(action)
     }
 
     override fun onDestroyView() {
