@@ -5,9 +5,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cornershop.counterstest.helpers.Event
+import com.cornershop.counterstest.model.repository.CountersRepository
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 
-class MainViewModel(): ViewModel() {
+class MainViewModel(private val countersRepository: CountersRepository): ViewModel() {
     val counterEditText = MutableLiveData<String>()
 
     private val _counterEvents: MutableLiveData<Event<CounterEvents>> = MutableLiveData()
@@ -16,8 +21,17 @@ class MainViewModel(): ViewModel() {
     fun addCounter() {
         viewModelScope.launch {
             counterEditText.value?.let { name ->
-                name.length
-                //TODO api call to add counter
+
+                countersRepository.addCounter(name)
+                    .onStart {  }
+                    .catch {
+                        if(it is HttpException){
+
+                        }
+                    }
+                    .collect {
+                        it.get(0)
+                    }
             }
         }
     }
@@ -26,7 +40,6 @@ class MainViewModel(): ViewModel() {
         _counterEvents.value = Event(CounterEvents(Actions.NavigateBackToMainFragment))
     }
 }
-
 
 sealed class Actions {
     object NavigateBackToMainFragment : Actions()
