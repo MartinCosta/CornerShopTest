@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cornershop.counterstest.helpers.Event
+import com.cornershop.counterstest.helpers.States
 import com.cornershop.counterstest.model.repository.CountersRepository
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
@@ -18,19 +19,21 @@ class MainViewModel(private val countersRepository: CountersRepository): ViewMod
     private val _counterEvents: MutableLiveData<Event<CounterEvents>> = MutableLiveData()
     val counterEvents: LiveData<Event<CounterEvents>> = _counterEvents
 
+    private val _state: MutableLiveData<States> = MutableLiveData()
+    val state: LiveData<States> = _state
+
     fun addCounter() {
         viewModelScope.launch {
             counterEditText.value?.let { name ->
-
                 countersRepository.addCounter(name)
-                    .onStart {  }
+                    .onStart { _state.value = States.Loading }
                     .catch {
-                        if(it is HttpException){
-
-                        }
+                        if(it is HttpException){ }
+                        _state.value = States.Error
                     }
                     .collect {
-                        it.get(0)
+                        _state.value = States.Success
+                        navigateBackToMainFragment()
                     }
             }
         }
