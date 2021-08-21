@@ -1,15 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="viewmodel"
+            type="com.cornershop.counterstest.viewModel.MainViewModel" />
+
+        <variable
+            name="item"
+            type="com.cornershop.counterstest.model.data.Counter" />
+    </data>
+<LinearLayout
     android:layout_width="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:layout_height="match_parent">
-
 
     <TextView
         android:id="@+id/noCountersTitle"
         android:layout_height="wrap_content"
+        android:layout_width="0dp"
         android:layout_weight="1"
         style="@style/TextAppearance.AppCompat.Small"
         tools:text="@string/counter_name_hint"
@@ -37,18 +47,15 @@
             tools:text="5"
             android:textColor="@color/black"/>
 
-
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_plus"
             android:layout_gravity="center"
             app:tint="@color/orange" />
-
-
-
     </LinearLayout>
+</LinearLayout>
+</layout>
     
     
 
-</LinearLayout>

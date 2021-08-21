@@ -6,7 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cornershop.counterstest.helpers.Event
 import com.cornershop.counterstest.helpers.States
+import com.cornershop.counterstest.model.data.Counter
 import com.cornershop.counterstest.model.repository.CountersRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onStart
@@ -14,7 +16,6 @@ import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
 class MainViewModel(private val countersRepository: CountersRepository): ViewModel() {
-    val counterEditText = MutableLiveData<String>()
 
     private val _counterEvents: MutableLiveData<Event<CounterEvents>> = MutableLiveData()
     val counterEvents: LiveData<Event<CounterEvents>> = _counterEvents
@@ -22,33 +23,44 @@ class MainViewModel(private val countersRepository: CountersRepository): ViewMod
     private val _state: MutableLiveData<States> = MutableLiveData()
     val state: LiveData<States> = _state
 
-    fun addCounter() {
+    private val _listOfCounters: MutableLiveData<List<Counter>> = MutableLiveData()
+    val listOfCounters: LiveData<List<Counter>> = _listOfCounters
+
+    init {
+        getCounters()
+    }
+
+    fun getCounters() {
         viewModelScope.launch {
-            counterEditText.value?.let { name ->
-                countersRepository.addCounter(name)
-                    .onStart { _state.value = States.Loading }
-                    .catch {
-                        if(it is HttpException){ }
-                        _state.value = States.Error
+            countersRepository.getCounters()
+                .onStart { _state.value = States.Loading }
+                .catch {  }
+                .collect { counters ->
+                    //Added small delay. So we can give time to animation transition to finish before render recycler list
+                    delay(300)
+                    if(counters.isEmpty()) {
+                        _state.value = States.SuccessEmpty
                     }
-                    .collect {
-                        _state.value = States.Success
-                        navigateBackToMainFragment()
+                    else{
+                        _state.value = States.SuccessHasData
+                        _listOfCounters.value = counters
                     }
-            }
+                }
         }
     }
 
-    fun navigateBackToMainFragment() {
-        _counterEvents.value = Event(CounterEvents(Actions.NavigateBackToMainFragment))
+    fun incrementCounter(id: String) {
+        viewModelScope.launch {
+            countersRepository.incrementCounter(id)
+                .catch {
+                    if(it is HttpException){
+                        it
+                    }
+                }
+                .collect {
+                    it
+                }
+        }
+
     }
 }
-
-sealed class Actions {
-    object NavigateBackToMainFragment : Actions()
-}
-
-data class CounterEvents(
-    var actions: Actions,
-    var extras: Any? = null
-)

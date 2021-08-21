@@ -7,7 +7,7 @@
         <import type="com.cornershop.counterstest.helpers.States" />
         <variable
             name="viewmodel"
-            type="com.cornershop.counterstest.viewModel.MainViewModel" />
+            type="com.cornershop.counterstest.viewModel.AddCounterViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

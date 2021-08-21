@@ -10,13 +10,13 @@ import com.cornershop.counterstest.helpers.EventObserver
 import com.cornershop.counterstest.helpers.hideKeyboard
 import com.cornershop.counterstest.helpers.showKeyboard
 import com.cornershop.counterstest.viewModel.Actions
-import com.cornershop.counterstest.viewModel.MainViewModel
-import org.koin.android.viewmodel.ext.android.sharedViewModel
+import com.cornershop.counterstest.viewModel.AddCounterViewModel
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class AddCounterFragment: Fragment() {
 
     private var viewDataBinding: FragmentAddCounterBinding? = null
-    private val viewModel: MainViewModel by sharedViewModel()
+    private val viewModel: AddCounterViewModel by viewModel()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         viewDataBinding = FragmentAddCounterBinding.inflate(inflater, container, false).apply {
