@@ -1,9 +1,14 @@
 package com.cornershop.counterstest.model.repository
 
+import android.R.attr
 import com.cornershop.counterstest.model.data.Counter
 import com.cornershop.counterstest.model.data.CounterId
 import com.cornershop.counterstest.model.data.CounterTitle
 import retrofit2.http.*
+import android.R.attr.path
+
+
+
 
 interface CountersAPI {
     @POST("api/v1/counter")
@@ -30,7 +35,7 @@ interface CountersAPI {
         "Content-Type: application/json")
     suspend fun decrementCount(@Body counterId: CounterId) : List<Counter>
 
-    @DELETE("api/v1/counter")
+    @HTTP(method = "DELETE", path = "api/v1/counter", hasBody = true)
     @Headers(
         "Accept: application/json",
         "Content-Type: application/json")

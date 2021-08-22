@@ -5,6 +5,8 @@
     <data>
         <import type="android.view.View" />
         <import type="com.cornershop.counterstest.helpers.States" />
+        <import type="com.cornershop.counterstest.helpers.ScreenStates" />
+
         <variable
             name="viewmodel"
             type="com.cornershop.counterstest.viewModel.MainViewModel" />
@@ -13,6 +15,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> viewmodel.openDeleteDialog()}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="@{viewmodel.screenState == ScreenStates.Editing.INSTANCE ? View.VISIBLE : View.GONE}"
+            android:src="@drawable/ic_delete"/>
         <include layout="@layout/search_bar"
             android:layout_width="match_parent"
             android:layout_height="?android:attr/actionBarSize"
@@ -104,6 +114,7 @@
             android:paddingTop="@dimen/margin_normal_1"
             android:paddingStart="@dimen/margin_normal_2"
             android:paddingEnd="@dimen/margin_normal_2"
+            android:onClick="@{() -> viewmodel.navigateToAddFragment()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

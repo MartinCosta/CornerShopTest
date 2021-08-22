@@ -3,6 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
+        <import type="com.cornershop.counterstest.helpers.ScreenStates" />
+        <import type="android.view.View" />
+
         <variable
             name="viewmodel"
             type="com.cornershop.counterstest.viewModel.MainViewModel" />
@@ -16,9 +19,10 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_marginTop="4dp"
+    android:animateLayoutChanges="true"
     android:paddingTop="@dimen/margin_normal_1"
-    android:background="@{item.deleteModeVisible ? @drawable/button_primary : null}"
     android:paddingBottom="@dimen/margin_normal_1"
+    android:background="@{viewmodel.screenState == ScreenStates.Editing.INSTANCE &amp;&amp; item.selectedForDelete == true ? @drawable/button_primary : null}"
     android:layout_height="wrap_content">
 
     <TextView
@@ -49,6 +53,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:visibility="@{viewmodel.screenState == ScreenStates.MainScreen.INSTANCE ? View.VISIBLE : View.GONE}"
         tools:visibility="visible"
         app:layout_constraintStart_toEndOf="@+id/guideline_inner_75">
 
@@ -83,10 +88,10 @@
 
     <ImageView
         android:id="@+id/checkDelete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:src="@drawable/ic_check"
-        android:visibility="gone"
+        android:visibility="@{viewmodel.screenState == ScreenStates.Editing.INSTANCE &amp;&amp; item.selectedForDelete == true ? View.VISIBLE : View.GONE}"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@+id/guideline_inner_75"/>

@@ -10,7 +10,7 @@ data class Counter(
     val id: String = "",
     @SerializedName("title")
     val title: String = "",
-    var deleteModeVisible: Boolean = false
+    var isSelectedForDelete: Boolean = false
 )
 
 data class CounterTitle(

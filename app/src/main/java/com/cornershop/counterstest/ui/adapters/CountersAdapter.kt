@@ -3,11 +3,15 @@ package com.cornershop.counterstest.ui.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LifecycleRegistry
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.cornershop.counterstest.R
 import com.cornershop.counterstest.databinding.CounterItemBinding
+import com.cornershop.counterstest.helpers.ScreenStates
 import com.cornershop.counterstest.model.data.Counter
 import com.cornershop.counterstest.viewModel.MainViewModel
 
@@ -21,40 +25,80 @@ class CountersAdapter(private val viewModel: MainViewModel): ListAdapter<Counter
             firstItem.count == secondItem.count
     }
 
+    override fun onViewAttachedToWindow(holder: CounterViewHolder) {
+        super.onViewAttachedToWindow(holder)
+        holder.markAttach()
+    }
+
+    override fun onViewDetachedFromWindow(holder: CounterViewHolder) {
+        super.onViewDetachedFromWindow(holder)
+        holder.markDetach()
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CounterViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = CounterItemBinding.inflate(inflater, parent, false)
+        val viewHolder = CounterViewHolder(binding)
         binding.viewmodel = viewModel
-        return CounterViewHolder(binding)
+        binding.lifecycleOwner = viewHolder
+
+        return viewHolder
     }
 
     override fun onBindViewHolder(holder: CounterViewHolder, position: Int) = holder.bind(getItem(position))
 
-    inner class CounterViewHolder(val binding: CounterItemBinding) : RecyclerView.ViewHolder(binding.root), View.OnLongClickListener {
+    inner class CounterViewHolder(val binding: CounterItemBinding) : RecyclerView.ViewHolder(binding.root), View.OnLongClickListener, LifecycleOwner {
+    private val lifecycleRegistry = LifecycleRegistry(this)
+
+    init {
+        lifecycleRegistry.currentState = Lifecycle.State.INITIALIZED
+    }
+
+    fun markAttach() {
+        lifecycleRegistry.currentState = Lifecycle.State.STARTED
+    }
+
+    fun markDetach() {
+        lifecycleRegistry.currentState = Lifecycle.State.DESTROYED
+    }
+
+    override fun getLifecycle(): Lifecycle {
+        return lifecycleRegistry
+    }
         fun bind(item: Counter) {
             binding.container.setOnLongClickListener(this)
             binding.item = item
             binding.executePendingBindings()
+
+            binding.container.setOnClickListener {
+                setDeleteItem()
+            }
         }
 
         override fun onLongClick(v: View?): Boolean {
             binding.item?.let {
-                if (binding.item is Counter) {
-                    if (binding.item?.deleteModeVisible!!.not()) {
-//                        binding.item.deleteModeVisible = true
-                        binding.llCount.visibility = View.GONE
-                        binding.checkDelete.visibility = View.VISIBLE
-                        binding.container.setBackgroundResource(R.drawable.button_primary)
-                    } else {
-                        binding.item?.deleteModeVisible = false
-                        binding.llCount.visibility = View.GONE
-                        binding.checkDelete.visibility = View.VISIBLE
-                        binding.container.setBackgroundResource(R.color.black)
-
-                    }
-                }
+                if (viewModel.screenState.value!! == ScreenStates.MainScreen)
+                    viewModel.setScreenState(ScreenStates.Editing)
+                else viewModel.exitEditingState()
             }
             return false
+        }
+
+        private fun setDeleteItem() {
+            if (viewModel.screenState.value!! == ScreenStates.Editing) {
+                if (binding.item?.isSelectedForDelete!!.not()) {
+                    binding.container.setBackgroundResource(R.drawable.button_primary)
+                    binding.checkDelete.visibility = View.VISIBLE
+                    getItem(adapterPosition).isSelectedForDelete = true
+                    viewModel.addItemToDelete(getItem(adapterPosition))
+                } else {
+                    binding.container.setBackgroundResource(R.color.welcome_background)
+                    binding.checkDelete.visibility = View.GONE
+                    getItem(adapterPosition).isSelectedForDelete = false
+                    viewModel.removeItemToDelete(getItem(adapterPosition))
+                    if(viewModel.listToDelete.isEmpty()) viewModel.exitEditingState()
+                }
+            }
         }
     }
 }

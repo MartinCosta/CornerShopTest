@@ -25,7 +25,7 @@ class MainViewModel(private val countersRepository: CountersRepository): ViewMod
     private val _state: MutableLiveData<States> = MutableLiveData()
     val state: LiveData<States> = _state
 
-    private val _screenState: MutableLiveData<ScreenStates> = MutableLiveData()
+    private val _screenState = MutableLiveData<ScreenStates>().apply { value = ScreenStates.MainScreen }
     val screenState: LiveData<ScreenStates> = _screenState
 
     private val _listOfCounters: MutableLiveData<List<Counter>> = MutableLiveData()
@@ -33,6 +33,8 @@ class MainViewModel(private val countersRepository: CountersRepository): ViewMod
 
     private val _filteredListOfCounters : MutableLiveData<List<Counter>> = MutableLiveData()
     val filteredListOfCounters: LiveData<List<Counter>> = _filteredListOfCounters
+
+    val listToDelete = mutableListOf<Counter>()
 
     init {
         getCounters()
@@ -63,6 +65,58 @@ class MainViewModel(private val countersRepository: CountersRepository): ViewMod
         }
     }
 
+    fun navigateToAddFragment() {
+        _counterEvents.value = Event(CounterEvents(Actions.NavigateAddFragment))
+    }
+
+    fun addItemToDelete(item: Counter) {
+        listToDelete.add(item)
+    }
+
+    fun removeItemToDelete(item: Counter) {
+        listToDelete.remove(item)
+    }
+
+    private fun clearDeleteList() {
+        listToDelete.clear()
+    }
+
+    fun exitEditingState() {
+        listOfCounters.value?.forEach { it.isSelectedForDelete = false }
+        clearDeleteList()
+        setScreenState(ScreenStates.MainScreen)
+    }
+
+    fun openDeleteDialog() {
+        _counterEvents.value = Event(CounterEvents(Actions.ConfirmDelete))
+    }
+
+    fun deleteCounters() {
+        var showErrorDialog = true
+        viewModelScope.launch {
+            listToDelete.forEach { counter ->
+                countersRepository.deleteCounter(CounterId(counter.id))
+                    .catch {
+                        if(showErrorDialog) {
+                            showErrorDialog = false
+                            _counterEvents.value = Event(CounterEvents(Actions.ErrorDelete))
+                        }
+                    }
+                    .collect { counters ->
+                        if(counters.isEmpty()) _state.value = States.SuccessEmpty
+                        else{
+                            _listOfCounters.value = counters
+                        }
+                    }
+            }
+            exitEditingState()
+        }
+    }
+
+    fun setScreenState(state: ScreenStates) {
+        _screenState.value = state
+    }
+
     fun incrementCounter(id: String) {
         viewModelScope.launch {
             countersRepository.incrementCounter(CounterId(id))
@@ -89,11 +143,5 @@ class MainViewModel(private val countersRepository: CountersRepository): ViewMod
                     _listOfCounters.value = it
                 }
         }
-    }
-
-    fun itemLongClick(item: Counter): Boolean{
-        item.deleteModeVisible = true
-        _listOfCounters.value = listOfCounters.value
-        return false
     }
 }
