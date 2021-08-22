@@ -4,9 +4,9 @@ import com.cornershop.counterstest.model.data.Counter
 import kotlinx.coroutines.flow.Flow
 
 interface CountersRepository {
-    fun addCounter(title: String): Flow<List<Counter>>
+    fun addCounter(counter: Counter): Flow<List<Counter>>
     fun getCounters(): Flow<List<Counter>>
-    fun incrementCounter(id: String): Flow<List<Counter>>
-    fun decrementCounter(id: String): Flow<List<Counter>>
-    fun deleteCounter(id: String): Flow<List<Counter>>
+    fun incrementCounter(counter: Counter): Flow<List<Counter>>
+    fun decrementCounter(counter: Counter): Flow<List<Counter>>
+    fun deleteCounter(counter: Counter): Flow<List<Counter>>
 }

@@ -21,6 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_width="0dp"
         android:layout_weight="1"
+        android:text="@{item.title}"
         style="@style/TextAppearance.AppCompat.Small"
         tools:text="@string/counter_name_hint"
         android:textColor="@color/black"/>
@@ -43,6 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_normal_0"
             android:layout_marginEnd="@dimen/margin_normal_1"
+            android:text="@{Integer.toString(item.count)}"
             style="@style/TextAppearance.AppCompat.Medium"
             tools:text="5"
             android:textColor="@color/black"/>
@@ -51,6 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_plus"
+            android:onClick="@{() -> viewmodel.incrementCounter(item)}"
             android:layout_gravity="center"
             app:tint="@color/orange" />
     </LinearLayout>

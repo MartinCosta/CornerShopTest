@@ -49,16 +49,16 @@ class MainViewModel(private val countersRepository: CountersRepository): ViewMod
         }
     }
 
-    fun incrementCounter(id: String) {
+    fun incrementCounter(item: Counter) {
         viewModelScope.launch {
-            countersRepository.incrementCounter(id)
+            countersRepository.incrementCounter(item)
                 .catch {
                     if(it is HttpException){
                         it
                     }
                 }
                 .collect {
-                    it
+                    _listOfCounters.value = it
                 }
         }
 

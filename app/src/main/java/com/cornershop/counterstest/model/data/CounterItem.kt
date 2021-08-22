@@ -5,9 +5,9 @@ import com.google.gson.annotations.SerializedName
 
 data class Counter(
     @SerializedName("count")
-    val count: Int,
+    val count: Int = 0,
     @SerializedName("id")
-    val id: String,
+    val id: String = "",
     @SerializedName("title")
-    val title: String
+    val title: String = ""
 )

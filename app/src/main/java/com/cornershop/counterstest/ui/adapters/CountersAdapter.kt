@@ -16,7 +16,7 @@ class CountersAdapter(private val items: List<Counter>, private val viewModel: M
             firstItem.id == secondItem.id
 
         override fun areContentsTheSame(firstItem: Counter, secondItem: Counter) =
-            firstItem == secondItem
+            firstItem.count == secondItem.count
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CounterViewHolder {

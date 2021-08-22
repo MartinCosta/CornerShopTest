@@ -8,7 +8,7 @@ interface CountersAPI {
     @Headers(
         "Accept: application/json",
         "Content-Type: application/json")
-    suspend fun addCounter(@Header("title") title: String) : List<Counter>
+    suspend fun addCounter(@Body counter: Counter) : List<Counter>
 
     @GET("api/v1/counters")
     @Headers(
@@ -20,17 +20,17 @@ interface CountersAPI {
     @Headers(
         "Accept: application/json",
         "Content-Type: application/json")
-    suspend fun incrementCount(@Header("id") id: String) : List<Counter>
+    suspend fun incrementCount(@Body counter: Counter) : List<Counter>
 
     @POST("api/v1/counter/dec")
     @Headers(
         "Accept: application/json",
         "Content-Type: application/json")
-    suspend fun decrementCount(@Header("id") id: String) : List<Counter>
+    suspend fun decrementCount(@Body counter: Counter) : List<Counter>
 
     @DELETE("api/v1/counter")
     @Headers(
         "Accept: application/json",
         "Content-Type: application/json")
-    suspend fun deleteCounter(@Header("id") id: String) : List<Counter>
+    suspend fun deleteCounter(@Body counter: Counter) : List<Counter>
 }

@@ -10,9 +10,9 @@ import retrofit2.Retrofit
 class CountersRepositoryImp(retrofit: Retrofit): CountersRepository {
     private val service = retrofit.create(CountersAPI::class.java)
 
-    override fun addCounter(title: String): Flow<List<Counter>> {
+    override fun addCounter(counter: Counter): Flow<List<Counter>> {
         return flow {
-            emit(service.addCounter(title))
+            emit(service.addCounter(counter))
         }.flowOn(Dispatchers.IO)
     }
 
@@ -22,21 +22,21 @@ class CountersRepositoryImp(retrofit: Retrofit): CountersRepository {
         }.flowOn(Dispatchers.IO)
     }
 
-    override fun incrementCounter(id: String): Flow<List<Counter>> {
+    override fun incrementCounter(counter: Counter): Flow<List<Counter>> {
         return flow {
-            emit(service.incrementCount(id))
+            emit(service.incrementCount(counter))
         }.flowOn(Dispatchers.IO)
     }
 
-    override fun decrementCounter(id: String): Flow<List<Counter>> {
+    override fun decrementCounter(counter: Counter): Flow<List<Counter>> {
         return flow {
-            emit(service.decrementCount(id))
+            emit(service.decrementCount(counter))
         }.flowOn(Dispatchers.IO)
     }
 
-    override fun deleteCounter(id: String): Flow<List<Counter>> {
+    override fun deleteCounter(counter: Counter): Flow<List<Counter>> {
         return flow {
-            emit(service.deleteCounter(id))
+            emit(service.deleteCounter(counter))
         }.flowOn(Dispatchers.IO)
     }
 }

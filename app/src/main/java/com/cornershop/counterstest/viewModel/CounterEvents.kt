@@ -2,6 +2,7 @@ package com.cornershop.counterstest.viewModel
 
 sealed class Actions {
     object NavigateBackToMainFragment : Actions()
+    object UpdateList : Actions()
 }
 
 data class CounterEvents(
