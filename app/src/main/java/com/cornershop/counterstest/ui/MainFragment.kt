@@ -13,12 +13,16 @@ import com.cornershop.counterstest.R
 import com.cornershop.counterstest.databinding.FragmentMainBinding
 import com.cornershop.counterstest.helpers.EventObserver
 import com.cornershop.counterstest.helpers.ScreenStates
+import com.cornershop.counterstest.helpers.hideKeyboard
+import com.cornershop.counterstest.helpers.showKeyboard
 import com.cornershop.counterstest.model.data.Counter
 import com.cornershop.counterstest.ui.adapters.CountersAdapter
 import com.cornershop.counterstest.viewModel.Actions
 import com.cornershop.counterstest.viewModel.MainViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.android.synthetic.main.search_bar.*
+import kotlinx.android.synthetic.main.custom_app_bar.*
+import kotlinx.android.synthetic.main.fragment_main.*
+
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class MainFragment: Fragment() {
@@ -39,17 +43,34 @@ class MainFragment: Fragment() {
         setObservers()
         observeEvents()
         customBackPressed()
+
+        placeholderSearchBar.setOnClickListener{
+            txtToolbarSearch.requestFocus()
+            requireActivity().showKeyboard()
+        }
+        searchBack.setOnClickListener{
+            txtToolbarSearch.setText("")
+            txtToolbarSearch.clearFocus()
+            requireActivity().hideKeyboard()
+        }
+        imgCloseToolbarSearch.setOnClickListener{
+            txtToolbarSearch.setText("")
+        }
+
         txtToolbarSearch.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
+                viewModel.updateSearchList((s ?: "").toString())
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                viewModel.updateSearchList(s ?: "")
             }
         })
+        txtToolbarSearch.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) viewModel.setScreenState(ScreenStates.Search)
+        }
     }
 
     private fun observeEvents() {

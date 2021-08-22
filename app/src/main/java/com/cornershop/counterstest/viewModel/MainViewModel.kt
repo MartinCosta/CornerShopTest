@@ -40,9 +40,9 @@ class MainViewModel(private val countersRepository: CountersRepository): ViewMod
         getCounters()
     }
 
-    fun updateSearchList(searchString: CharSequence){
+    fun updateSearchList(searchString: String){
         _filteredListOfCounters.postValue(_listOfCounters.value?.filter {
-                counter -> counter.title.contains(searchString.toString(), ignoreCase = true)
+                counter -> counter.title.contains(searchString, ignoreCase = true)
         })
     }
 
@@ -60,6 +60,7 @@ class MainViewModel(private val countersRepository: CountersRepository): ViewMod
                     else{
                         _state.value = States.SuccessHasData
                         _listOfCounters.value = counters
+                        _filteredListOfCounters.value = counters
                     }
                 }
         }
