@@ -27,8 +27,17 @@ class MainViewModel(private val countersRepository: CountersRepository): ViewMod
     private val _listOfCounters: MutableLiveData<List<Counter>> = MutableLiveData()
     val listOfCounters: LiveData<List<Counter>> = _listOfCounters
 
+    private val _filteredListOfCounters : MutableLiveData<List<Counter>> = MutableLiveData()
+    val filteredListOfCounters: LiveData<List<Counter>> = _filteredListOfCounters
+
     init {
         getCounters()
+    }
+
+    fun updateSearchList(searchString: CharSequence){
+        _filteredListOfCounters.postValue(_listOfCounters.value?.filter {
+                counter -> counter.title.contains(searchString.toString(), ignoreCase = true)
+        })
     }
 
     fun getCounters() {
