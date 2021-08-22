@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cornershop.counterstest.helpers.Event
+import com.cornershop.counterstest.helpers.ScreenStates
 import com.cornershop.counterstest.helpers.States
 import com.cornershop.counterstest.model.data.Counter
 import com.cornershop.counterstest.model.data.CounterId
@@ -23,6 +24,9 @@ class MainViewModel(private val countersRepository: CountersRepository): ViewMod
 
     private val _state: MutableLiveData<States> = MutableLiveData()
     val state: LiveData<States> = _state
+
+    private val _screenState: MutableLiveData<ScreenStates> = MutableLiveData()
+    val screenState: LiveData<ScreenStates> = _screenState
 
     private val _listOfCounters: MutableLiveData<List<Counter>> = MutableLiveData()
     val listOfCounters: LiveData<List<Counter>> = _listOfCounters
@@ -76,5 +80,11 @@ class MainViewModel(private val countersRepository: CountersRepository): ViewMod
                     _listOfCounters.value = it
                 }
         }
+    }
+
+    fun itemLongClick(item: Counter): Boolean{
+        item.deleteModeVisible = true
+        _listOfCounters.value = listOfCounters.value
+        return false
     }
 }

@@ -9,7 +9,8 @@ data class Counter(
     @SerializedName("id")
     val id: String = "",
     @SerializedName("title")
-    val title: String = ""
+    val title: String = "",
+    var deleteModeVisible: Boolean = false
 )
 
 data class CounterTitle(
