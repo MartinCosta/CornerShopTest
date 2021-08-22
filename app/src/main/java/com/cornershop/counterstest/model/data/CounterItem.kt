@@ -11,3 +11,13 @@ data class Counter(
     @SerializedName("title")
     val title: String = ""
 )
+
+data class CounterTitle(
+    @SerializedName("title")
+    val title: String = ""
+)
+
+data class CounterId(
+    @SerializedName("id")
+    val id: String = ""
+)

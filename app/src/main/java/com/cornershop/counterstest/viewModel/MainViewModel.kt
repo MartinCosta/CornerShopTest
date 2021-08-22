@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.cornershop.counterstest.helpers.Event
 import com.cornershop.counterstest.helpers.States
 import com.cornershop.counterstest.model.data.Counter
+import com.cornershop.counterstest.model.data.CounterId
 import com.cornershop.counterstest.model.repository.CountersRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.catch
@@ -49,9 +50,9 @@ class MainViewModel(private val countersRepository: CountersRepository): ViewMod
         }
     }
 
-    fun incrementCounter(item: Counter) {
+    fun incrementCounter(id: String) {
         viewModelScope.launch {
-            countersRepository.incrementCounter(item)
+            countersRepository.incrementCounter(CounterId(id))
                 .catch {
                     if(it is HttpException){
                         it
@@ -63,9 +64,9 @@ class MainViewModel(private val countersRepository: CountersRepository): ViewMod
         }
     }
 
-    fun decrementCounter(item: Counter) {
+    fun decrementCounter(id: String) {
         viewModelScope.launch {
-            countersRepository.decrementCounter(item)
+            countersRepository.decrementCounter(CounterId(id))
                 .catch {
                     if(it is HttpException){
                         it

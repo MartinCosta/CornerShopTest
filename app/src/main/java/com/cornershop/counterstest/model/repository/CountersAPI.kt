@@ -1,6 +1,8 @@
 package com.cornershop.counterstest.model.repository
 
 import com.cornershop.counterstest.model.data.Counter
+import com.cornershop.counterstest.model.data.CounterId
+import com.cornershop.counterstest.model.data.CounterTitle
 import retrofit2.http.*
 
 interface CountersAPI {
@@ -8,7 +10,7 @@ interface CountersAPI {
     @Headers(
         "Accept: application/json",
         "Content-Type: application/json")
-    suspend fun addCounter(@Body counter: Counter) : List<Counter>
+    suspend fun addCounter(@Body counterTitle: CounterTitle) : List<Counter>
 
     @GET("api/v1/counters")
     @Headers(
@@ -20,17 +22,17 @@ interface CountersAPI {
     @Headers(
         "Accept: application/json",
         "Content-Type: application/json")
-    suspend fun incrementCount(@Body counter: Counter) : List<Counter>
+    suspend fun incrementCount(@Body counterId: CounterId) : List<Counter>
 
     @POST("api/v1/counter/dec")
     @Headers(
         "Accept: application/json",
         "Content-Type: application/json")
-    suspend fun decrementCount(@Body counter: Counter) : List<Counter>
+    suspend fun decrementCount(@Body counterId: CounterId) : List<Counter>
 
     @DELETE("api/v1/counter")
     @Headers(
         "Accept: application/json",
         "Content-Type: application/json")
-    suspend fun deleteCounter(@Body counter: Counter) : List<Counter>
+    suspend fun deleteCounter(@Body counterId: CounterId) : List<Counter>
 }

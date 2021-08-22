@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.cornershop.counterstest.helpers.Event
 import com.cornershop.counterstest.helpers.States
 import com.cornershop.counterstest.model.data.Counter
+import com.cornershop.counterstest.model.data.CounterTitle
 import com.cornershop.counterstest.model.repository.CountersRepository
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
@@ -26,7 +27,7 @@ class AddCounterViewModel(private val countersRepository: CountersRepository): V
     fun addCounter() {
         viewModelScope.launch {
             counterEditText.value?.let { name ->
-                countersRepository.addCounter(Counter(title = name))
+                countersRepository.addCounter(CounterTitle(title = name))
                     .onStart { _state.value = States.Loading }
                     .catch {
                         if(it is HttpException){ }
