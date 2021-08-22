@@ -1,6 +1,8 @@
 package com.cornershop.counterstest.model.repository
 
 import com.cornershop.counterstest.model.data.Counter
+import com.cornershop.counterstest.model.data.CounterId
+import com.cornershop.counterstest.model.data.CounterTitle
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -10,9 +12,9 @@ import retrofit2.Retrofit
 class CountersRepositoryImp(retrofit: Retrofit): CountersRepository {
     private val service = retrofit.create(CountersAPI::class.java)
 
-    override fun addCounter(counter: Counter): Flow<List<Counter>> {
+    override fun addCounter(counterTitle: CounterTitle): Flow<List<Counter>> {
         return flow {
-            emit(service.addCounter(counter))
+            emit(service.addCounter(counterTitle))
         }.flowOn(Dispatchers.IO)
     }
 
@@ -22,21 +24,21 @@ class CountersRepositoryImp(retrofit: Retrofit): CountersRepository {
         }.flowOn(Dispatchers.IO)
     }
 
-    override fun incrementCounter(counter: Counter): Flow<List<Counter>> {
+    override fun incrementCounter(counterId: CounterId): Flow<List<Counter>> {
         return flow {
-            emit(service.incrementCount(counter))
+            emit(service.incrementCount(counterId))
         }.flowOn(Dispatchers.IO)
     }
 
-    override fun decrementCounter(counter: Counter): Flow<List<Counter>> {
+    override fun decrementCounter(counterId: CounterId): Flow<List<Counter>> {
         return flow {
-            emit(service.decrementCount(counter))
+            emit(service.decrementCount(counterId))
         }.flowOn(Dispatchers.IO)
     }
 
-    override fun deleteCounter(counter: Counter): Flow<List<Counter>> {
+    override fun deleteCounter(counterId: CounterId): Flow<List<Counter>> {
         return flow {
-            emit(service.deleteCounter(counter))
+            emit(service.deleteCounter(counterId))
         }.flowOn(Dispatchers.IO)
     }
 }

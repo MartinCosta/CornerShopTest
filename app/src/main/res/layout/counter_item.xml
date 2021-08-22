@@ -53,7 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_plus"
-            android:onClick="@{() -> viewmodel.incrementCounter(item)}"
+            android:onClick="@{() -> viewmodel.incrementCounter(item.id)}"
             android:layout_gravity="center"
             app:tint="@color/orange" />
     </LinearLayout>
