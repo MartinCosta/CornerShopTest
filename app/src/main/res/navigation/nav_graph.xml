@@ -15,7 +15,10 @@
             app:exitAnim="@anim/slide_out_left_anim"
             app:popEnterAnim="@anim/slide_in_left_anim"
             app:popExitAnim="@anim/slide_out_right_anim"
-            app:destination="@id/MainFragment"/>
+            app:destination="@id/MainFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/welcomeFragment"
+            app:popUpToInclusive="true"/>
     </fragment>
 
     <fragment

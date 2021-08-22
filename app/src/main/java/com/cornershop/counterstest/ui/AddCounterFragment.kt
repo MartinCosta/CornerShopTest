@@ -5,12 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.cornershop.counterstest.R
 import com.cornershop.counterstest.databinding.FragmentAddCounterBinding
 import com.cornershop.counterstest.helpers.EventObserver
 import com.cornershop.counterstest.helpers.hideKeyboard
 import com.cornershop.counterstest.helpers.showKeyboard
 import com.cornershop.counterstest.viewModel.Actions
 import com.cornershop.counterstest.viewModel.AddCounterViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class AddCounterFragment: Fragment() {
@@ -39,9 +42,20 @@ class AddCounterFragment: Fragment() {
     private fun observeEvents() {
         viewModel.counterEvents.observe(viewLifecycleOwner, EventObserver {
             when (it.actions) {
-                Actions.NavigateBackToMainFragment -> navigateBackToMainFragment()
+                Actions.NavigateBackToMainFragment -> navigateBackToMainFragment(it.extras as Boolean)
+                Actions.ErrorAddCounter -> errorAddCounterDialog()
             }
         })
+    }
+
+    private fun errorAddCounterDialog() {
+        MaterialAlertDialogBuilder(requireContext(), R.style.MyThemeOverlay_MaterialComponents_MaterialAlertDialog)
+            .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+                dialog.dismiss()
+            }
+            .setMessage(getString(R.string.connection_error_description))
+            .setTitle(getString(R.string.error_creating_counter_title))
+            .show()
     }
 
     private fun setEditTextFocus() {
@@ -49,7 +63,8 @@ class AddCounterFragment: Fragment() {
         requireActivity().showKeyboard()
     }
 
-    private fun navigateBackToMainFragment() {
+    private fun navigateBackToMainFragment(updateList: Boolean) {
+        findNavController().previousBackStackEntry?.savedStateHandle?.set("should.update", updateList)
         requireActivity().hideKeyboard()
         requireActivity().onBackPressed()
     }

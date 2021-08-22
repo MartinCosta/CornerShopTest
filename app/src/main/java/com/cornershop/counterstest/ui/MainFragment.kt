@@ -25,6 +25,7 @@ import kotlinx.android.synthetic.main.custom_app_bar.*
 import kotlinx.android.synthetic.main.fragment_main.*
 
 import org.koin.android.viewmodel.ext.android.viewModel
+import java.lang.reflect.Type
 
 class MainFragment: Fragment() {
 
@@ -45,6 +46,7 @@ class MainFragment: Fragment() {
         observeEvents()
         customBackPressed()
         setSwipeToRefresh()
+        waitForAddCounterResult()
 
         placeholderSearchBar.setOnClickListener{
             txtToolbarSearch.requestFocus()
@@ -94,6 +96,13 @@ class MainFragment: Fragment() {
         viewModel.filteredListOfCounters.observe(viewLifecycleOwner, {
 //            submitList(it)
         })
+    }
+
+    private fun waitForAddCounterResult() {
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>("should.update")?.observe(
+            viewLifecycleOwner) { update ->
+            if(update) viewModel.getCounters()
+        }
     }
 
     private fun setSwipeToRefresh() {

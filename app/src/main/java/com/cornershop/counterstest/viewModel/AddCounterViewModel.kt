@@ -30,18 +30,18 @@ class AddCounterViewModel(private val countersRepository: CountersRepository): V
                 countersRepository.addCounter(CounterTitle(title = name))
                     .onStart { _state.value = States.Loading }
                     .catch {
-                        if(it is HttpException){ }
                         _state.value = States.Error
+                        _counterEvents.value = Event(CounterEvents(Actions.ErrorAddCounter))
                     }
                     .collect {
                         _state.value = States.Success
-                        navigateBackToMainFragment()
+                        navigateBackToMainFragment(true)
                     }
             }
         }
     }
 
-    fun navigateBackToMainFragment() {
-        _counterEvents.value = Event(CounterEvents(Actions.NavigateBackToMainFragment))
+    fun navigateBackToMainFragment(updateList: Boolean) {
+        _counterEvents.value = Event(CounterEvents(Actions.NavigateBackToMainFragment, updateList))
     }
 }

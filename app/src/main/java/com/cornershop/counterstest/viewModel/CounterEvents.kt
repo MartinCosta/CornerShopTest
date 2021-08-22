@@ -5,6 +5,7 @@ sealed class Actions {
     object NavigateAddFragment : Actions()
     object ConfirmDelete : Actions()
     object ErrorDelete : Actions()
+    object ErrorAddCounter : Actions()
     object StopSwipeRefreshing : Actions()
 }
 

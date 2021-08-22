@@ -97,6 +97,7 @@
             android:textStyle="bold"
             android:textAllCaps="true"
             android:layout_gravity="center"
+            android:elevation="8dp"
             android:visibility="@{(viewmodel.state == States.Error.INSTANCE) ? View.VISIBLE : View.GONE}"
             android:text="@string/retry"
             android:layout_marginTop="@dimen/margin_normal_2"
