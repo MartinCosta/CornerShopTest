@@ -63,6 +63,7 @@ class MainViewModel(private val countersRepository: CountersRepository): ViewMod
                         _filteredListOfCounters.value = counters
                     }
                 }
+            _counterEvents.value = Event(CounterEvents(Actions.StopSwipeRefreshing))
         }
     }
 

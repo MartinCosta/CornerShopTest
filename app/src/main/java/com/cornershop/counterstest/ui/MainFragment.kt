@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.cornershop.counterstest.R
@@ -43,6 +44,7 @@ class MainFragment: Fragment() {
         setObservers()
         observeEvents()
         customBackPressed()
+        setSwipeToRefresh()
 
         placeholderSearchBar.setOnClickListener{
             txtToolbarSearch.requestFocus()
@@ -79,6 +81,7 @@ class MainFragment: Fragment() {
                 Actions.ConfirmDelete -> deleteDialog()
                 Actions.NavigateAddFragment -> navigateToAddCounter()
                 Actions.ErrorDelete -> errorDeleteDialog()
+                Actions.StopSwipeRefreshing -> stopRefreshing()
             }
         })
     }
@@ -91,6 +94,17 @@ class MainFragment: Fragment() {
         viewModel.filteredListOfCounters.observe(viewLifecycleOwner, {
 //            submitList(it)
         })
+    }
+
+    private fun setSwipeToRefresh() {
+        swipeLayout.setColorSchemeColors(ContextCompat.getColor(requireContext(), R.color.orange))
+        swipeLayout.setOnRefreshListener {
+            viewModel.getCounters()
+        }
+    }
+
+    private fun stopRefreshing() {
+        swipeLayout.isRefreshing = false
     }
 
     private fun customBackPressed() {
@@ -134,6 +148,7 @@ class MainFragment: Fragment() {
 
 
     private fun submitList(list: List<Counter>) {
+        swipeLayout.isRefreshing = false
         if(adapter == null) {
             adapter = CountersAdapter(viewModel)
         }
