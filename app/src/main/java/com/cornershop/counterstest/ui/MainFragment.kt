@@ -52,7 +52,7 @@ class MainFragment: Fragment() {
 
     private fun submitList(list: List<Counter>) {
         if(adapter == null) {
-            adapter = CountersAdapter(list, viewModel)
+            adapter = CountersAdapter(viewModel)
         }
         viewDataBinding?.counterRv?.adapter = adapter
         adapter?.submitList(list)

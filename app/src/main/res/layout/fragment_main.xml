@@ -47,7 +47,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:visibility="gone"/>
 
         <TextView
             android:id="@+id/noCountersDescription"
@@ -64,7 +65,8 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/noCountersTitle"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.0"
+            tools:visibility="gone"/>
 
 
         <com.google.android.material.button.MaterialButton
@@ -112,7 +114,6 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintTop_toBottomOf="@+id/countersTotalCount"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             tools:listitem="@layout/counter_item"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

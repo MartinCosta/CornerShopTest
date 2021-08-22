@@ -61,6 +61,19 @@ class MainViewModel(private val countersRepository: CountersRepository): ViewMod
                     _listOfCounters.value = it
                 }
         }
+    }
 
+    fun decrementCounter(item: Counter) {
+        viewModelScope.launch {
+            countersRepository.decrementCounter(item)
+                .catch {
+                    if(it is HttpException){
+                        it
+                    }
+                }
+                .collect {
+                    _listOfCounters.value = it
+                }
+        }
     }
 }
