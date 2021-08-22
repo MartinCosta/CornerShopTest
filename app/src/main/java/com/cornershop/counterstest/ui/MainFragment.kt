@@ -1,6 +1,8 @@
 package com.cornershop.counterstest.ui
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,8 +12,8 @@ import com.cornershop.counterstest.databinding.FragmentMainBinding
 import com.cornershop.counterstest.helpers.EventObserver
 import com.cornershop.counterstest.model.data.Counter
 import com.cornershop.counterstest.ui.adapters.CountersAdapter
-import com.cornershop.counterstest.viewModel.Actions
 import com.cornershop.counterstest.viewModel.MainViewModel
+import kotlinx.android.synthetic.main.search_bar.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class MainFragment: Fragment() {
@@ -34,18 +36,32 @@ class MainFragment: Fragment() {
         viewDataBinding?.buttonAddCounter?.setOnClickListener {
             navigateToAddCounter()
         }
+        txtToolbarSearch.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                viewModel.updateSearchList(s ?: "")
+            }
+        })
     }
 
     private fun observeEvents() {
         viewModel.counterEvents.observe(viewLifecycleOwner, EventObserver {
             when (it.actions) {
-
             }
         })
     }
 
     private fun setObservers() {
         viewModel.listOfCounters.observe(viewLifecycleOwner, {
+            submitList(it)
+        })
+
+        viewModel.filteredListOfCounters.observe(viewLifecycleOwner, {
             submitList(it)
         })
     }
