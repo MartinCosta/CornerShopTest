@@ -49,13 +49,16 @@ class MainFragment: Fragment() {
         waitForAddCounterResult()
 
         placeholderSearchBar.setOnClickListener{
+            bgBlackGradient.visibility = View.VISIBLE
             txtToolbarSearch.requestFocus()
             requireActivity().showKeyboard()
+            viewModel.setScreenState(ScreenStates.Search)
         }
         searchBack.setOnClickListener{
             txtToolbarSearch.setText("")
-            txtToolbarSearch.clearFocus()
             requireActivity().hideKeyboard()
+            viewModel.exitSearchState()
+            bgBlackGradient.visibility = View.GONE
         }
         imgCloseToolbarSearch.setOnClickListener{
             txtToolbarSearch.setText("")
@@ -63,18 +66,18 @@ class MainFragment: Fragment() {
 
         txtToolbarSearch.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                viewModel.updateSearchList((s ?: "").toString())
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                viewModel.updateSearchList((s ?: "").toString())
+                if(s.toString().isEmpty()) bgBlackGradient.visibility = View.VISIBLE
+                else bgBlackGradient.visibility = View.GONE
             }
         })
-        txtToolbarSearch.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) viewModel.setScreenState(ScreenStates.Search)
-        }
+
     }
 
     private fun observeEvents() {
@@ -94,7 +97,7 @@ class MainFragment: Fragment() {
         })
 
         viewModel.filteredListOfCounters.observe(viewLifecycleOwner, {
-//            submitList(it)
+            it?.let { submitList(it) }
         })
     }
 
@@ -120,6 +123,11 @@ class MainFragment: Fragment() {
         val callback = object : OnBackPressedCallback(true /* enabled by default */) {
             override fun handleOnBackPressed() {
                 if(viewModel.screenState.value == ScreenStates.Editing) viewModel.exitEditingState()
+                if(viewModel.screenState.value == ScreenStates.Search) {
+                    txtToolbarSearch.setText("")
+                    viewModel.exitSearchState()
+                    bgBlackGradient.visibility = View.GONE
+                }
                 isEnabled = false
             }
         }

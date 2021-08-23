@@ -36,14 +36,23 @@ class MainViewModel(private val countersRepository: CountersRepository): ViewMod
 
     val listToDelete = mutableListOf<Counter>()
 
+    private val _noSearchResultsIsVisible: MutableLiveData<Boolean> = MutableLiveData()
+    val noSearchResultsIsVisible: LiveData<Boolean> = _noSearchResultsIsVisible
+
     init {
         getCounters()
     }
 
     fun updateSearchList(searchString: String){
-        _filteredListOfCounters.postValue(_listOfCounters.value?.filter {
-                counter -> counter.title.contains(searchString, ignoreCase = true)
+        _filteredListOfCounters.value = (_listOfCounters.value?.filter {
+                counter ->
+            counter.title.contains(searchString, ignoreCase = true)
+
         })
+        val isNoResults : Boolean = (searchString.length > 0 &&
+                                    _filteredListOfCounters.value != null &&
+                _filteredListOfCounters.value!!.size == 0)
+        _noSearchResultsIsVisible.postValue(isNoResults)
     }
 
     fun getCounters() {
@@ -86,6 +95,11 @@ class MainViewModel(private val countersRepository: CountersRepository): ViewMod
     fun exitEditingState() {
         listOfCounters.value?.forEach { it.isSelectedForDelete = false }
         clearDeleteList()
+        setScreenState(ScreenStates.MainScreen)
+    }
+
+    fun exitSearchState() {
+   //     _filteredListOfCounters.value = listOfCounters.value
         setScreenState(ScreenStates.MainScreen)
     }
 
