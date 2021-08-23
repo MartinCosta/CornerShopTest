@@ -26,7 +26,14 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            buildConfigField 'String', 'BASEURL', '"http://api.counter.com/"'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled true
+            debuggable true
+            buildConfigField 'String', 'BASEURL', '"http://10.0.0.100:3000/"'
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }

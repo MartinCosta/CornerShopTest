@@ -1,13 +1,9 @@
-package com.cornershop.counterstest.model.repository
+package com.cornershop.counterstest.data.repository
 
-import android.R.attr
 import com.cornershop.counterstest.model.data.Counter
 import com.cornershop.counterstest.model.data.CounterId
 import com.cornershop.counterstest.model.data.CounterTitle
 import retrofit2.http.*
-import android.R.attr.path
-
-
 
 
 interface CountersAPI {

@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/welcomeFragment"
-        android:name="com.cornershop.counterstest.ui.WelcomeFragment"
+        android:name="com.cornershop.counterstest.presentation.WelcomeFragment"
         tools:layout="@layout/fragment_welcome">
         <action
             android:id="@+id/actionToMainFragment"
@@ -23,7 +23,7 @@
 
     <fragment
         android:id="@+id/MainFragment"
-        android:name="com.cornershop.counterstest.ui.MainFragment"
+        android:name="com.cornershop.counterstest.presentation.MainFragment"
         tools:layout="@layout/fragment_main">
         <action
             android:id="@+id/actionToAddCounterFragment"
@@ -36,7 +36,7 @@
 
     <fragment
         android:id="@+id/AddCounterFragment"
-        android:name="com.cornershop.counterstest.ui.AddCounterFragment"
+        android:name="com.cornershop.counterstest.presentation.AddCounterFragment"
         tools:layout="@layout/fragment_add_counter">
         <action
             android:id="@+id/actionToItemExampleFragment"
@@ -49,7 +49,7 @@
 
     <fragment
         android:id="@+id/ItemExampleFragment"
-        android:name="com.cornershop.counterstest.ui.ItemExamplesFragment"
+        android:name="com.cornershop.counterstest.presentation.ItemExamplesFragment"
         tools:layout="@layout/fragment_item_example">
     </fragment>
 </navigation>

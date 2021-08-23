@@ -1,4 +1,4 @@
-package com.cornershop.counterstest.koin
+package com.cornershop.counterstest.di
 
 import com.cornershop.counterstest.viewModel.AddCounterViewModel
 import com.cornershop.counterstest.viewModel.MainViewModel

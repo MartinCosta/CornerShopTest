@@ -1,4 +1,4 @@
-package com.cornershop.counterstest.ui
+package com.cornershop.counterstest.presentation
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.cornershop.counterstest.databinding.FragmentItemExampleBinding
 import com.cornershop.counterstest.R
-import com.cornershop.counterstest.ui.adapters.ExamplesAdapter
+import com.cornershop.counterstest.presentation.adapters.ExamplesAdapter
 
 class ItemExamplesFragment: Fragment() {
 

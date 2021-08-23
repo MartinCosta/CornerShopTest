@@ -6,12 +6,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cornershop.counterstest.helpers.Event
 import com.cornershop.counterstest.helpers.States
-import com.cornershop.counterstest.model.data.Counter
 import com.cornershop.counterstest.model.data.CounterTitle
-import com.cornershop.counterstest.model.repository.CountersRepository
+import com.cornershop.counterstest.data.repository.CountersRepository
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
 
 class AddCounterViewModel(private val countersRepository: CountersRepository): ViewModel() {
     val counterEditText = MutableLiveData<String>()

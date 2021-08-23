@@ -1,4 +1,4 @@
-package com.cornershop.counterstest.model.repository
+package com.cornershop.counterstest.data.repository
 
 import com.cornershop.counterstest.model.data.Counter
 import com.cornershop.counterstest.model.data.CounterId

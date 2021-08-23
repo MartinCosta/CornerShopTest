@@ -1,4 +1,4 @@
-package com.cornershop.counterstest.model.db
+package com.cornershop.counterstest.data.db
 
 import android.content.Context
 import androidx.room.Database

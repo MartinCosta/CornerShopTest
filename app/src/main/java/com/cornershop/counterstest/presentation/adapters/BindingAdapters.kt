@@ -1,4 +1,4 @@
-package com.cornershop.counterstest.ui.adapters
+package com.cornershop.counterstest.presentation.adapters
 
 import android.view.View
 import androidx.databinding.BindingAdapter

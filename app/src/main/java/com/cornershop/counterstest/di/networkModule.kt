@@ -1,14 +1,12 @@
-package com.cornershop.counterstest.koin
+package com.cornershop.counterstest.di
 
-import com.cornershop.counterstest.model.repository.CountersRepository
-import com.cornershop.counterstest.model.repository.CountersRepositoryImp
+import com.cornershop.counterstest.BuildConfig
+import com.cornershop.counterstest.data.repository.CountersRepository
+import com.cornershop.counterstest.data.repository.CountersRepositoryImp
 import okhttp3.OkHttpClient
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-
-//Set your local IP 192.xxx.xx.xx as Base Url to Test on a real Device.
-const val BASE_URL = "http://10.0.2.2:3000/"
 
 val networkModule = module {
     factory { provideOkHttpClient() }
@@ -17,7 +15,7 @@ val networkModule = module {
 }
 
 fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
-    return Retrofit.Builder().baseUrl(BASE_URL).client(okHttpClient)
+    return Retrofit.Builder().baseUrl(BuildConfig.BASEURL).client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create()).build()
 }
 

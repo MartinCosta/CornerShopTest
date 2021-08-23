@@ -1,4 +1,4 @@
-package com.cornershop.counterstest.ui
+package com.cornershop.counterstest.presentation
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,25 +6,25 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.cornershop.counterstest.R
 import com.cornershop.counterstest.databinding.FragmentMainBinding
 import com.cornershop.counterstest.helpers.EventObserver
 import com.cornershop.counterstest.helpers.ScreenStates
-import com.cornershop.counterstest.helpers.hideKeyboard
-import com.cornershop.counterstest.helpers.showKeyboard
 import com.cornershop.counterstest.model.data.Counter
-import com.cornershop.counterstest.ui.adapters.CountersAdapter
+import com.cornershop.counterstest.presentation.adapters.CountersAdapter
 import com.cornershop.counterstest.viewModel.Actions
 import com.cornershop.counterstest.viewModel.MainViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
 import android.content.Intent
+import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.lifecycleScope
+import com.cornershop.counterstest.helpers.hideKeyboard
+import com.cornershop.counterstest.helpers.showKeyboard
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class MainFragment: Fragment() {
 

@@ -1,4 +1,4 @@
-package com.cornershop.counterstest.model.db
+package com.cornershop.counterstest.data.db
 
 import androidx.annotation.WorkerThread
 import com.cornershop.counterstest.model.data.Counter

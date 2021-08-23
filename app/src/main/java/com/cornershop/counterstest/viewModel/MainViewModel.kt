@@ -9,8 +9,8 @@ import com.cornershop.counterstest.helpers.ScreenStates
 import com.cornershop.counterstest.helpers.States
 import com.cornershop.counterstest.model.data.Counter
 import com.cornershop.counterstest.model.data.CounterId
-import com.cornershop.counterstest.model.db.CounterDbRepository
-import com.cornershop.counterstest.model.repository.CountersRepository
+import com.cornershop.counterstest.data.db.CounterDbRepository
+import com.cornershop.counterstest.data.repository.CountersRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch

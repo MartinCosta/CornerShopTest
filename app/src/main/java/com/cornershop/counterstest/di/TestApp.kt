@@ -1,4 +1,4 @@
-package com.cornershop.counterstest.koin
+package com.cornershop.counterstest.di
 
 import android.app.Application
 import org.koin.android.ext.koin.androidContext
