@@ -87,7 +87,7 @@ class CountersAdapter(private val viewModel: MainViewModel): ListAdapter<Counter
         private fun setDeleteItem() {
             if (viewModel.screenState.value!! == ScreenStates.Editing) {
                 if (binding.item?.isSelectedForDelete!!.not()) {
-                    binding.container.setBackgroundResource(R.drawable.button_primary)
+                    binding.container.setBackgroundResource(R.drawable.background_editing_item)
                     binding.checkDelete.visibility = View.VISIBLE
                     getItem(adapterPosition).isSelectedForDelete = true
                     viewModel.addItemToDelete(getItem(adapterPosition))

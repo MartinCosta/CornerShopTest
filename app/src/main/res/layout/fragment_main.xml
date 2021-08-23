@@ -27,8 +27,7 @@
             android:visibility="@{viewmodel.screenState != ScreenStates.MainScreen.INSTANCE ? View.VISIBLE : View.GONE}"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            bind:viewmodel="@{viewmodel}"
-            />
+            bind:viewmodel="@{viewmodel}" />
 
         <include layout="@layout/search_bar"
             android:id="@+id/placeholderSearchBar"

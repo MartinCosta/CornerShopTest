@@ -100,6 +100,19 @@
                 android:textAlignment="viewStart"
                 android:text="@={viewmodel.counterEditText}"/>
         </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/exampleDisclaimer"
+            style="@style/TextAppearance.AppCompat.Small"
+            android:textColor="@color/gray"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColorLink="@color/gray"
+            android:layout_marginTop="@dimen/margin_normal_1"
+            android:text="@string/create_counter_disclaimer"
+            app:layout_constraintTop_toBottomOf="@+id/editTextLayout"
+            app:layout_constraintStart_toStartOf="parent"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
 

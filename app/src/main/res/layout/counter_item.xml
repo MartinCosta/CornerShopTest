@@ -22,7 +22,7 @@
     android:animateLayoutChanges="true"
     android:paddingTop="@dimen/margin_normal_1"
     android:paddingBottom="@dimen/margin_normal_1"
-    android:background="@{viewmodel.screenState == ScreenStates.Editing.INSTANCE &amp;&amp; item.selectedForDelete == true ? @drawable/button_primary : null}"
+    android:background="@{viewmodel.screenState == ScreenStates.Editing.INSTANCE &amp;&amp; item.selectedForDelete == true ? @drawable/background_editing_item : null}"
     android:layout_height="wrap_content">
 
     <TextView

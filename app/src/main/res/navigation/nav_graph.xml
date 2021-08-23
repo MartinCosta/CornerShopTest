@@ -38,5 +38,18 @@
         android:id="@+id/AddCounterFragment"
         android:name="com.cornershop.counterstest.ui.AddCounterFragment"
         tools:layout="@layout/fragment_add_counter">
+        <action
+            android:id="@+id/actionToItemExampleFragment"
+            app:enterAnim="@anim/slide_in_right_anim"
+            app:exitAnim="@anim/slide_out_left_anim"
+            app:popEnterAnim="@anim/slide_in_left_anim"
+            app:popExitAnim="@anim/slide_out_right_anim"
+            app:destination="@id/ItemExampleFragment"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/ItemExampleFragment"
+        android:name="com.cornershop.counterstest.ui.ItemExamplesFragment"
+        tools:layout="@layout/fragment_item_example">
     </fragment>
 </navigation>

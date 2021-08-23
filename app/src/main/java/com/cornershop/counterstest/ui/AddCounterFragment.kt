@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.cornershop.counterstest.R
 import com.cornershop.counterstest.databinding.FragmentAddCounterBinding
 import com.cornershop.counterstest.helpers.EventObserver
 import com.cornershop.counterstest.helpers.hideKeyboard
@@ -15,6 +14,18 @@ import com.cornershop.counterstest.viewModel.Actions
 import com.cornershop.counterstest.viewModel.AddCounterViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.android.viewmodel.ext.android.viewModel
+
+
+import android.text.style.UnderlineSpan
+
+import android.text.Spanned
+
+import android.text.style.ClickableSpan
+
+import android.text.SpannableString
+import android.text.method.LinkMovementMethod
+import com.cornershop.counterstest.R
+
 
 class AddCounterFragment: Fragment() {
 
@@ -32,11 +43,28 @@ class AddCounterFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setEditTextFocus()
         observeEvents()
+        setSpannableExampleText()
+        waitForExampleResult()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         viewDataBinding = null
+    }
+
+    private fun setSpannableExampleText() {
+        val examplesClickableUnderline = SpannableString(getString(R.string.create_counter_disclaimer))
+        val clickableSpan: ClickableSpan = object : ClickableSpan() {
+            override fun onClick(textView: View) {
+                navigateToItemExamples()
+                requireActivity().hideKeyboard()
+            }
+        }
+        examplesClickableUnderline.setSpan(clickableSpan, 36, 44, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        examplesClickableUnderline.setSpan(UnderlineSpan(), 36, 44, 0)
+        viewDataBinding?.exampleDisclaimer?.text = examplesClickableUnderline
+        viewDataBinding?.exampleDisclaimer?.movementMethod = LinkMovementMethod.getInstance()
+
     }
 
     private fun observeEvents() {
@@ -46,6 +74,14 @@ class AddCounterFragment: Fragment() {
                 Actions.ErrorAddCounter -> errorAddCounterDialog()
             }
         })
+    }
+
+    private fun waitForExampleResult() {
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<String>("send.example.name")?.observe(
+            viewLifecycleOwner) { name ->
+            viewDataBinding?.addCounterEditTxt?.clearComposingText()
+            viewDataBinding?.addCounterEditTxt?.setText(name)
+        }
     }
 
     private fun errorAddCounterDialog() {
@@ -67,5 +103,10 @@ class AddCounterFragment: Fragment() {
         findNavController().previousBackStackEntry?.savedStateHandle?.set("should.update", updateList)
         requireActivity().hideKeyboard()
         requireActivity().onBackPressed()
+    }
+
+    private fun navigateToItemExamples() {
+        val action = AddCounterFragmentDirections.actionToItemExampleFragment()
+        findNavController().navigate(action)
     }
 }

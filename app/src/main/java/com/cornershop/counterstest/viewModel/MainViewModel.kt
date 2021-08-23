@@ -53,7 +53,7 @@ class MainViewModel(private val countersRepository: CountersRepository): ViewMod
                 .catch { _state.value = States.Error  }
                 .collect { counters ->
                     //Added small delay. So we can give time to animation transition to finish before render recycler list
-                    delay(300)
+                    delay(400)
                     if(counters.isEmpty()) {
                         _state.value = States.SuccessEmpty
                     }

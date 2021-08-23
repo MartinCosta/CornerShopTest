@@ -54,4 +54,7 @@
     <string name="delete_x_question">Delete "%s"?</string>
     <string name="delete_x_bulk">"%s counters"</string>
     <string name="n_per_counter_name">%d × %s</string>
+    <string name="drinks">Drinks</string>
+    <string name="food">Food</string>
+    <string name="misc">Misc</string>
 </resources>
