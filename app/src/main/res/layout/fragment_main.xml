@@ -112,13 +112,25 @@
             android:id="@+id/countersTotalCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/TextAppearance.AppCompat.Small"
+            style="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/black"
             android:textStyle="bold"
             android:layout_marginTop="@dimen/margin_normal_1"
             android:layout_marginStart="@dimen/margin_normal_3"
-            android:layout_marginEnd="@dimen/margin_normal_1"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/placeholderSearchBar"
+            tools:text="@string/n_items"/>
+
+        <TextView
+            android:id="@+id/countersTotalTimes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/gray"
+            android:textStyle="bold"
+            android:layout_marginTop="@dimen/margin_normal_1"
+            android:layout_marginStart="@dimen/margin_normal_1"
+            app:layout_constraintStart_toEndOf="@+id/countersTotalCount"
             app:layout_constraintTop_toBottomOf="@+id/placeholderSearchBar"
             tools:text="@string/n_times"/>
 

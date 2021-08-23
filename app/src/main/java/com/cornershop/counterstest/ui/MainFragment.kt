@@ -1,14 +1,14 @@
 package com.cornershop.counterstest.ui
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.cornershop.counterstest.R
 import com.cornershop.counterstest.databinding.FragmentMainBinding
@@ -21,8 +21,8 @@ import com.cornershop.counterstest.ui.adapters.CountersAdapter
 import com.cornershop.counterstest.viewModel.Actions
 import com.cornershop.counterstest.viewModel.MainViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.android.synthetic.main.custom_app_bar.*
-import kotlinx.android.synthetic.main.fragment_main.*
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class MainFragment: Fragment() {
@@ -45,34 +45,38 @@ class MainFragment: Fragment() {
         customBackPressed()
         setSwipeToRefresh()
         waitForAddCounterResult()
+        searchToolbarListener()
+    }
 
-        placeholderSearchBar.setOnClickListener{
-            txtToolbarSearch.requestFocus()
-            requireActivity().showKeyboard()
-            viewModel.setScreenState(ScreenStates.Search)
-        }
-        searchBack.setOnClickListener{
-            txtToolbarSearch.setText("")
-            requireActivity().hideKeyboard()
-            viewModel.exitSearchState()
-        }
-        imgCloseToolbarSearch.setOnClickListener{
-            txtToolbarSearch.setText("")
-        }
+    private fun searchToolbarListener() {
+        viewDataBinding?.let {
+            with(viewDataBinding!!){
+                val searchEditText = customAppBar.txtToolbarSearch
+                placeholderSearchBar.setOnClickListener{
+                    viewModel.setScreenState(ScreenStates.Search)
+                    lifecycleScope.launch {
+                        delay(100)
+                        searchEditText.requestFocus()
+                        requireActivity().showKeyboard()
+                    }
+                }
 
-        txtToolbarSearch.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
+                customAppBar.searchBack.setOnClickListener{
+                    searchEditText.setText("")
+                    requireActivity().hideKeyboard()
+                    viewModel.exitSearchState()
+                }
+
+                customAppBar.imgCloseToolbarSearch.setOnClickListener{
+                    searchEditText.setText("")
+                }
+
+                searchEditText.addTextChangedListener {
+                    viewModel.updateSearchText((it ?: "").toString())
+                    viewModel.updateSearchList((it ?: "").toString())
+                }
             }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                viewModel.updateSearchText((s ?: "").toString())
-                viewModel.updateSearchList((s ?: "").toString())
-            }
-        })
-
+        }
     }
 
     private fun observeEvents() {
@@ -92,22 +96,31 @@ class MainFragment: Fragment() {
     private fun setObservers() {
         viewModel.listOfCounters.observe(viewLifecycleOwner, {
             submitList(it)
+            if(viewModel.screenState.value != ScreenStates.Search) setTotalCountText(it)
         })
         viewModel.filteredListOfCounters.observe(viewLifecycleOwner, {
             it?.let {
-                viewDataBinding?.countersTotalCount?.text = String.format(getString(R.string.n_items), it.count())
-                submitList(it) }
+                submitList(it)
+                if(viewModel.screenState.value == ScreenStates.Search) setTotalCountText(it)
+            }
         })
         viewModel.numberOfSelectedItems.observe(viewLifecycleOwner, {
             it?.let {
                 val selectedCounterText = String.format(getString(R.string.n_selected), it)
-                txtSelectedCounters.text = selectedCounterText
+                viewDataBinding?.customAppBar?.txtSelectedCounters?.text = selectedCounterText
             }
         })
 
         viewModel.screenState.observe(viewLifecycleOwner, {
             viewDataBinding?.swipeLayout?.isEnabled = it == ScreenStates.MainScreen
         })
+    }
+
+    private fun setTotalCountText(list: List<Counter>) {
+        viewDataBinding?.countersTotalCount?.text = String.format(getString(R.string.n_items), list.count())
+        var totalCount = 0
+        list.map { totalCount += it.count }
+        viewDataBinding?.countersTotalTimes?.text = String.format(getString(R.string.n_times), totalCount)
     }
 
     private fun waitForAddCounterResult() {
@@ -134,7 +147,7 @@ class MainFragment: Fragment() {
                 when(viewModel.screenState.value) {
                     ScreenStates.Editing -> viewModel.exitEditingState()
                     ScreenStates.Search -> {
-                        txtToolbarSearch.setText("")
+                        viewDataBinding?.customAppBar?.txtToolbarSearch?.setText("")
                         viewModel.exitSearchState()
                     }
                     ScreenStates.MainScreen -> {
