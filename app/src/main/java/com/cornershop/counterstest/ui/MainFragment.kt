@@ -24,6 +24,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
+import android.content.Intent
+
+
+
 
 class MainFragment: Fragment() {
 
@@ -79,6 +83,21 @@ class MainFragment: Fragment() {
         }
     }
 
+    private fun shareIntent() {
+        val listOfSharingCounter = mutableListOf<String>()
+        viewModel.listToDelete.map {
+            listOfSharingCounter.add(String.format(getString(R.string.n_per_counter_name), it.count, it.title))
+        }
+        val titleToShare = listOfSharingCounter.toString().replace("[", "").replace("]", "");
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, titleToShare)
+            type = "text/plain"
+        }
+        val shareIntent = Intent.createChooser(sendIntent, null)
+        startActivity(shareIntent)
+    }
+
     private fun observeEvents() {
         viewModel.counterEvents.observe(viewLifecycleOwner, EventObserver {
             when (it.actions) {
@@ -86,6 +105,7 @@ class MainFragment: Fragment() {
                 Actions.NavigateAddFragment -> navigateToAddCounter()
                 Actions.ErrorDelete -> errorDeleteDialog()
                 Actions.StopSwipeRefreshing -> stopRefreshing()
+                Actions.ShareCounters -> shareIntent()
                 Actions.ErrorIncrementCounter -> errorUpdatingCounterDialog(it.extras as Counter, isIncrement = true)
                 Actions.ErrorDecrementCounter -> errorUpdatingCounterDialog(it.extras as Counter, isIncrement = false)
                 else -> {}

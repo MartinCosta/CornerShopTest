@@ -133,6 +133,10 @@ class MainViewModel(private val countersRepository: CountersRepository, private 
         _counterEvents.value = Event(CounterEvents(Actions.ConfirmDelete))
     }
 
+    fun shareCounters() {
+        _counterEvents.value = Event(CounterEvents(Actions.ShareCounters))
+    }
+
     fun deleteCounters() {
         var showErrorDialog = true
         viewModelScope.launch {

@@ -7,6 +7,7 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+//Set your local IP 192.xxx.xx.xx as Base Url to Test on a real Device.
 const val BASE_URL = "http://10.0.2.2:3000/"
 
 val networkModule = module {
