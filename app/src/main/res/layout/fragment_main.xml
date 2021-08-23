@@ -8,6 +8,7 @@
         <import type="android.view.View" />
         <import type="com.cornershop.counterstest.helpers.States" />
         <import type="com.cornershop.counterstest.helpers.ScreenStates" />
+        <import type="android.text.TextUtils" />
 
         <variable
             name="viewmodel"
@@ -187,6 +188,8 @@
             android:clickable="true"
             android:focusable="true"
             android:visibility="gone"
+            app:screenState="@{viewmodel.screenState}"
+            app:searchText="@{viewmodel.searchText}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/customAppBar" />
 

@@ -49,7 +49,6 @@ class MainFragment: Fragment() {
         waitForAddCounterResult()
 
         placeholderSearchBar.setOnClickListener{
-            bgBlackGradient.visibility = View.VISIBLE
             txtToolbarSearch.requestFocus()
             requireActivity().showKeyboard()
             viewModel.setScreenState(ScreenStates.Search)
@@ -58,7 +57,6 @@ class MainFragment: Fragment() {
             txtToolbarSearch.setText("")
             requireActivity().hideKeyboard()
             viewModel.exitSearchState()
-            bgBlackGradient.visibility = View.GONE
         }
         imgCloseToolbarSearch.setOnClickListener{
             txtToolbarSearch.setText("")
@@ -72,9 +70,8 @@ class MainFragment: Fragment() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                viewModel.updateSearchText((s ?: "").toString())
                 viewModel.updateSearchList((s ?: "").toString())
-                if(s.toString().isEmpty()) bgBlackGradient.visibility = View.VISIBLE
-                else bgBlackGradient.visibility = View.GONE
             }
         })
 
@@ -95,9 +92,14 @@ class MainFragment: Fragment() {
         viewModel.listOfCounters.observe(viewLifecycleOwner, {
             submitList(it)
         })
-
         viewModel.filteredListOfCounters.observe(viewLifecycleOwner, {
             it?.let { submitList(it) }
+        })
+        viewModel.numberOfSelectedItems.observe(viewLifecycleOwner, {
+            it?.let {
+                val selectedCounterText = String.format(getString(R.string.n_selected), it)
+                txtSelectedCounters.text = selectedCounterText
+            }
         })
     }
 
@@ -126,7 +128,6 @@ class MainFragment: Fragment() {
                 if(viewModel.screenState.value == ScreenStates.Search) {
                     txtToolbarSearch.setText("")
                     viewModel.exitSearchState()
-                    bgBlackGradient.visibility = View.GONE
                 }
                 isEnabled = false
             }

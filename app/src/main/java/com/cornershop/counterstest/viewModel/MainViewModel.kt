@@ -11,9 +11,7 @@ import com.cornershop.counterstest.model.data.Counter
 import com.cornershop.counterstest.model.data.CounterId
 import com.cornershop.counterstest.model.repository.CountersRepository
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
@@ -21,6 +19,9 @@ class MainViewModel(private val countersRepository: CountersRepository): ViewMod
 
     private val _counterEvents: MutableLiveData<Event<CounterEvents>> = MutableLiveData()
     val counterEvents: LiveData<Event<CounterEvents>> = _counterEvents
+
+    private val _searchText: MutableLiveData<String> = MutableLiveData()
+    val searchText: LiveData<String> = _searchText
 
     private val _state: MutableLiveData<States> = MutableLiveData()
     val state: LiveData<States> = _state
@@ -34,6 +35,9 @@ class MainViewModel(private val countersRepository: CountersRepository): ViewMod
     private val _filteredListOfCounters : MutableLiveData<List<Counter>> = MutableLiveData()
     val filteredListOfCounters: LiveData<List<Counter>> = _filteredListOfCounters
 
+    private val _numberOfSelectedItems: MutableLiveData<Int> = MutableLiveData()
+    val numberOfSelectedItems: LiveData<Int> = _numberOfSelectedItems
+
     val listToDelete = mutableListOf<Counter>()
 
     private val _noSearchResultsIsVisible: MutableLiveData<Boolean> = MutableLiveData()
@@ -43,15 +47,20 @@ class MainViewModel(private val countersRepository: CountersRepository): ViewMod
         getCounters()
     }
 
+    fun updateSearchText(text: String) {
+        _searchText.value = text
+    }
+
     fun updateSearchList(searchString: String){
         _filteredListOfCounters.value = (_listOfCounters.value?.filter {
                 counter ->
             counter.title.contains(searchString, ignoreCase = true)
 
         })
-        val isNoResults : Boolean = (searchString.length > 0 &&
-                                    _filteredListOfCounters.value != null &&
-                _filteredListOfCounters.value!!.size == 0)
+        val isNoResults : Boolean =
+                    (searchString.length > 0 &&
+                    _filteredListOfCounters.value != null &&
+                    _filteredListOfCounters.value!!.size == 0)
         _noSearchResultsIsVisible.postValue(isNoResults)
     }
 
@@ -82,14 +91,17 @@ class MainViewModel(private val countersRepository: CountersRepository): ViewMod
 
     fun addItemToDelete(item: Counter) {
         listToDelete.add(item)
+        _numberOfSelectedItems.value = listToDelete.size
     }
 
     fun removeItemToDelete(item: Counter) {
         listToDelete.remove(item)
+        _numberOfSelectedItems.value = listToDelete.size
     }
 
     private fun clearDeleteList() {
         listToDelete.clear()
+        _numberOfSelectedItems.value = listToDelete.size
     }
 
     fun exitEditingState() {
@@ -99,7 +111,6 @@ class MainViewModel(private val countersRepository: CountersRepository): ViewMod
     }
 
     fun exitSearchState() {
-   //     _filteredListOfCounters.value = listOfCounters.value
         setScreenState(ScreenStates.MainScreen)
     }
 
@@ -143,6 +154,11 @@ class MainViewModel(private val countersRepository: CountersRepository): ViewMod
                 }
                 .collect {
                     _listOfCounters.value = it
+                    if(screenState.value == ScreenStates.Search) {
+                        _filteredListOfCounters.value = (_listOfCounters.value?.filter { counter ->
+                            counter.title.contains(searchText.value.toString(), ignoreCase = true)
+                        })
+                    }
                 }
         }
     }
@@ -157,6 +173,11 @@ class MainViewModel(private val countersRepository: CountersRepository): ViewMod
                 }
                 .collect {
                     _listOfCounters.value = it
+                    if(screenState.value == ScreenStates.Search) {
+                        _filteredListOfCounters.value = (_listOfCounters.value?.filter { counter ->
+                            counter.title.contains(searchText.value.toString(), ignoreCase = true)
+                        })
+                    }
                 }
         }
     }

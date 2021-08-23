@@ -25,11 +25,25 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             app:tint="@color/black"
-            android:visibility="visible"
+            android:visibility="@{viewmodel.screenState == ScreenStates.Search.INSTANCE ? View.VISIBLE : View.GONE }"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_baseline_arrow_back_24" />
+
+        <ImageView
+            android:background="@null"
+            android:id="@+id/editClose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            app:tint="@color/orange"
+            android:onClick="@{() -> viewmodel.exitEditingState()}"
+            android:visibility="@{viewmodel.screenState == ScreenStates.Editing.INSTANCE ? View.VISIBLE : View.GONE }"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_close" />
 
         <EditText
             android:id="@+id/txtToolbarSearch"
@@ -40,6 +54,7 @@
             android:layout_marginTop="@dimen/margin_normal_1"
             android:background="@android:color/transparent"
             android:hint="@string/search_counters"
+            android:visibility="@{viewmodel.screenState == ScreenStates.Search.INSTANCE ? View.VISIBLE : View.GONE }"
             android:singleLine="true"
             android:focusable="true"
             android:clickable="true"
@@ -47,14 +62,45 @@
             app:layout_constraintStart_toEndOf="@+id/searchBack"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:id="@+id/txtSelectedCounters"
+            style="@style/TextAppearance.AppCompat.Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_normal_1"
+            android:layout_marginTop="@dimen/margin_normal_1"
+            android:layout_marginEnd="@dimen/margin_normal_1"
+            android:background="@android:color/transparent"
+            android:visibility="@{viewmodel.screenState == ScreenStates.Editing.INSTANCE ? View.VISIBLE : View.GONE }"
+            android:singleLine="true"
+            android:text="@string/n_selected"
+            app:layout_constraintEnd_toStartOf="@+id/ivDeleteItems"
+            app:layout_constraintStart_toEndOf="@+id/editClose"
+            app:layout_constraintTop_toTopOf="parent"/>
+
         <ImageView
+            android:id="@+id/ivDeleteItems"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal_2"
+            android:layout_marginEnd="@dimen/margin_normal_1"
             android:onClick="@{() -> viewmodel.openDeleteDialog()}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/shareCounters"
+            android:visibility="@{viewmodel.screenState == ScreenStates.Editing.INSTANCE ? View.VISIBLE : View.GONE}"
+            android:src="@drawable/ic_delete"/>
+
+
+        <ImageView
+            android:id="@+id/shareCounters"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal_2"
+            android:layout_marginEnd="@dimen/margin_normal_1"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:visibility="@{viewmodel.screenState == ScreenStates.Editing.INSTANCE ? View.VISIBLE : View.GONE}"
-            android:src="@drawable/ic_delete"/>
+            android:src="@drawable/ic_share"/>
 
         <ImageView
             android:id="@+id/imgCloseToolbarSearch"
@@ -62,12 +108,11 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_normal_2"
             android:layout_marginEnd="@dimen/margin_normal_1"
+            android:visibility="@{viewmodel.screenState == ScreenStates.Search.INSTANCE ? View.VISIBLE : View.GONE}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_close"
-            app:tint="@color/black"
-            android:visibility="visible"
-            tools:visibility="visible"/>
+            app:tint="@color/black" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>
 </layout>
