@@ -1,11 +1,15 @@
 package com.cornershop.counterstest.model.data
 
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
+@Entity(tableName = "counterItem")
 data class Counter(
     @SerializedName("count")
-    var count: Int = 0,
+    val count: Int = 0,
+    @PrimaryKey
     @SerializedName("id")
     val id: String = "",
     @SerializedName("title")

@@ -61,7 +61,7 @@
         android:id="@+id/minus"
         android:layout_width="32dp"
         android:layout_height="32dp"
-        android:onClick="@{() -> viewmodel.decrementCounter(item.id)}"
+        android:onClick="@{() -> viewmodel.decrementCounter(item)}"
         android:src="@drawable/ic_baseline_remove_24"
         android:enabled="@{item.count > 0 ? true : false}"
         android:background="@drawable/ic_baseline_remove_24"
@@ -81,7 +81,7 @@
             android:id="@+id/plus"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:onClick="@{() -> viewmodel.incrementCounter(item.id)}"
+            android:onClick="@{() -> viewmodel.incrementCounter(item)}"
             android:background="@drawable/ic_plus"
             app:tint="@color/orange" />
     </LinearLayout>

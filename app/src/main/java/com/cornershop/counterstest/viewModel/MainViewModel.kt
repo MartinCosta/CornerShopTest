@@ -9,13 +9,14 @@ import com.cornershop.counterstest.helpers.ScreenStates
 import com.cornershop.counterstest.helpers.States
 import com.cornershop.counterstest.model.data.Counter
 import com.cornershop.counterstest.model.data.CounterId
+import com.cornershop.counterstest.model.db.CounterDbRepository
 import com.cornershop.counterstest.model.repository.CountersRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
-class MainViewModel(private val countersRepository: CountersRepository): ViewModel() {
+class MainViewModel(private val countersRepository: CountersRepository, private val counterDbRepository: CounterDbRepository): ViewModel() {
 
     private val _counterEvents: MutableLiveData<Event<CounterEvents>> = MutableLiveData()
     val counterEvents: LiveData<Event<CounterEvents>> = _counterEvents
@@ -68,7 +69,8 @@ class MainViewModel(private val countersRepository: CountersRepository): ViewMod
         viewModelScope.launch {
             countersRepository.getCounters()
                 .onStart { _state.value = States.Loading }
-                .catch { _state.value = States.Error  }
+                .catch { _state.value = States.Error
+                checkDBList()}
                 .collect { counters ->
                     //Added small delay. So we can give time to animation transition to finish before render recycler list
                     delay(400)
@@ -79,9 +81,22 @@ class MainViewModel(private val countersRepository: CountersRepository): ViewMod
                         _state.value = States.SuccessHasData
                         _listOfCounters.value = counters
                         _filteredListOfCounters.value = counters
+                        counterDbRepository.deleteAllCounters()
+                        counterDbRepository.insert(counters)
                     }
                 }
             _counterEvents.value = Event(CounterEvents(Actions.StopSwipeRefreshing))
+        }
+    }
+
+    private fun checkDBList(){
+        viewModelScope.launch {
+            val listFromDB = counterDbRepository.getCounter()
+
+            if(listFromDB.isNotEmpty()) {
+                _state.value = States.SuccessHasData
+                _listOfCounters.value = listFromDB
+            }
         }
     }
 
@@ -144,13 +159,11 @@ class MainViewModel(private val countersRepository: CountersRepository): ViewMod
         _screenState.value = state
     }
 
-    fun incrementCounter(id: String) {
+    fun incrementCounter(item: Counter) {
         viewModelScope.launch {
-            countersRepository.incrementCounter(CounterId(id))
+            countersRepository.incrementCounter(CounterId(item.id))
                 .catch {
-                    if(it is HttpException){
-                        it
-                    }
+                    _counterEvents.value = Event(CounterEvents(Actions.ErrorIncrementCounter, item))
                 }
                 .collect {
                     _listOfCounters.value = it
@@ -163,13 +176,11 @@ class MainViewModel(private val countersRepository: CountersRepository): ViewMod
         }
     }
 
-    fun decrementCounter(id: String) {
+    fun decrementCounter(item: Counter) {
         viewModelScope.launch {
-            countersRepository.decrementCounter(CounterId(id))
+            countersRepository.decrementCounter(CounterId(item.id))
                 .catch {
-                    if(it is HttpException){
-                        it
-                    }
+                    _counterEvents.value = Event(CounterEvents(Actions.ErrorDecrementCounter, item))
                 }
                 .collect {
                     _listOfCounters.value = it

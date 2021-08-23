@@ -84,12 +84,15 @@ class MainFragment: Fragment() {
                 Actions.NavigateAddFragment -> navigateToAddCounter()
                 Actions.ErrorDelete -> errorDeleteDialog()
                 Actions.StopSwipeRefreshing -> stopRefreshing()
+                Actions.ErrorIncrementCounter -> errorUpdatingCounterDialog(it.extras as Counter, isIncrement = true)
+                Actions.ErrorDecrementCounter -> errorUpdatingCounterDialog(it.extras as Counter, isIncrement = false)
             }
         })
     }
 
     private fun setObservers() {
         viewModel.listOfCounters.observe(viewLifecycleOwner, {
+
             submitList(it)
         })
         viewModel.filteredListOfCounters.observe(viewLifecycleOwner, {
@@ -164,6 +167,22 @@ class MainFragment: Fragment() {
             .show()
     }
 
+    private fun errorUpdatingCounterDialog(item: Counter, isIncrement: Boolean) {
+        val count = if(isIncrement) item.count + 1 else item.count - 1
+        val title = getString(R.string.error_updating_counter_title, item.title, count)
+        MaterialAlertDialogBuilder(requireContext(), R.style.MyThemeOverlay_MaterialComponents_MaterialAlertDialog)
+            .setPositiveButton(getString(R.string.dismiss)) { dialog, _ ->
+                dialog.dismiss()
+                viewModel.exitEditingState()
+            }
+            .setNegativeButton(getString(R.string.retry)) { dialog, _ ->
+                dialog.dismiss()
+                if(isIncrement) viewModel.incrementCounter(item) else viewModel.decrementCounter(item)
+            }
+            .setMessage(getString(R.string.connection_error_description))
+            .setTitle(title)
+            .show()
+    }
 
     private fun submitList(list: List<Counter>) {
         swipeLayout.isRefreshing = false

@@ -9,9 +9,7 @@ import com.cornershop.counterstest.helpers.States
 import com.cornershop.counterstest.model.data.Counter
 import com.cornershop.counterstest.model.data.CounterTitle
 import com.cornershop.counterstest.model.repository.CountersRepository
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 

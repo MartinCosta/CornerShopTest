@@ -7,6 +7,8 @@ sealed class Actions {
     object ErrorDelete : Actions()
     object ErrorAddCounter : Actions()
     object StopSwipeRefreshing : Actions()
+    object ErrorIncrementCounter : Actions()
+    object ErrorDecrementCounter : Actions()
 }
 
 data class CounterEvents(

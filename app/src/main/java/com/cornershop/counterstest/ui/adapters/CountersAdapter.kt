@@ -24,6 +24,7 @@ class CountersAdapter(private val viewModel: MainViewModel): ListAdapter<Counter
         override fun areContentsTheSame(firstItem: Counter, secondItem: Counter) =
             firstItem.count == secondItem.count
     }
+    private val viewHolders: MutableList<CounterViewHolder> = mutableListOf()
 
     override fun onViewAttachedToWindow(holder: CounterViewHolder) {
         super.onViewAttachedToWindow(holder)
@@ -35,12 +36,20 @@ class CountersAdapter(private val viewModel: MainViewModel): ListAdapter<Counter
         holder.markDetach()
     }
 
+    fun setLifecycleDestroyed() {
+        viewHolders.forEach {
+            it.markDestroyed()
+        }
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CounterViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = CounterItemBinding.inflate(inflater, parent, false)
         val viewHolder = CounterViewHolder(binding)
         binding.viewmodel = viewModel
         binding.lifecycleOwner = viewHolder
+        viewHolder.markCreated()
+        viewHolders.add(viewHolder)
 
         return viewHolder
     }
@@ -48,23 +57,37 @@ class CountersAdapter(private val viewModel: MainViewModel): ListAdapter<Counter
     override fun onBindViewHolder(holder: CounterViewHolder, position: Int) = holder.bind(getItem(position))
 
     inner class CounterViewHolder(val binding: CounterItemBinding) : RecyclerView.ViewHolder(binding.root), View.OnLongClickListener, LifecycleOwner {
-    private val lifecycleRegistry = LifecycleRegistry(this)
+        private val lifecycleRegistry = LifecycleRegistry(this)
+        private var wasPaused: Boolean = false
 
-    init {
-        lifecycleRegistry.currentState = Lifecycle.State.INITIALIZED
-    }
+        init {
+            lifecycleRegistry.currentState = Lifecycle.State.INITIALIZED
+        }
+        fun markCreated() {
+            lifecycleRegistry.currentState = Lifecycle.State.CREATED
+        }
 
-    fun markAttach() {
-        lifecycleRegistry.currentState = Lifecycle.State.STARTED
-    }
+        fun markAttach() {
+            if (wasPaused) {
+                lifecycleRegistry.currentState = Lifecycle.State.RESUMED
+                wasPaused = false
+            } else {
+                lifecycleRegistry.currentState = Lifecycle.State.STARTED
+            }
+        }
 
-    fun markDetach() {
-        lifecycleRegistry.currentState = Lifecycle.State.DESTROYED
-    }
+        fun markDetach() {
+            wasPaused = true
+            lifecycleRegistry.currentState = Lifecycle.State.CREATED
+        }
 
-    override fun getLifecycle(): Lifecycle {
-        return lifecycleRegistry
-    }
+        fun markDestroyed() {
+            lifecycleRegistry.currentState = Lifecycle.State.DESTROYED
+        }
+        override fun getLifecycle(): Lifecycle {
+            return lifecycleRegistry
+        }
+
         fun bind(item: Counter) {
             binding.container.setOnLongClickListener(this)
             binding.item = item
