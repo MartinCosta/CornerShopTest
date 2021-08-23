@@ -26,9 +26,6 @@ import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
 import android.content.Intent
 
-
-
-
 class MainFragment: Fragment() {
 
     private val viewModel: MainViewModel by viewModel()
@@ -88,7 +85,7 @@ class MainFragment: Fragment() {
         viewModel.listToDelete.map {
             listOfSharingCounter.add(String.format(getString(R.string.n_per_counter_name), it.count, it.title))
         }
-        val titleToShare = listOfSharingCounter.toString().replace("[", "").replace("]", "");
+        val titleToShare = listOfSharingCounter.toString().replace("[", "").replace("]", "")
         val sendIntent: Intent = Intent().apply {
             action = Intent.ACTION_SEND
             putExtra(Intent.EXTRA_TEXT, titleToShare)
