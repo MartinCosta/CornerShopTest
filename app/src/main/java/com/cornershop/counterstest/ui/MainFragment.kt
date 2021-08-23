@@ -23,9 +23,7 @@ import com.cornershop.counterstest.viewModel.MainViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.custom_app_bar.*
 import kotlinx.android.synthetic.main.fragment_main.*
-
 import org.koin.android.viewmodel.ext.android.viewModel
-import java.lang.reflect.Type
 
 class MainFragment: Fragment() {
 
@@ -86,23 +84,29 @@ class MainFragment: Fragment() {
                 Actions.StopSwipeRefreshing -> stopRefreshing()
                 Actions.ErrorIncrementCounter -> errorUpdatingCounterDialog(it.extras as Counter, isIncrement = true)
                 Actions.ErrorDecrementCounter -> errorUpdatingCounterDialog(it.extras as Counter, isIncrement = false)
+                else -> {}
             }
         })
     }
 
     private fun setObservers() {
         viewModel.listOfCounters.observe(viewLifecycleOwner, {
-
             submitList(it)
         })
         viewModel.filteredListOfCounters.observe(viewLifecycleOwner, {
-            it?.let { submitList(it) }
+            it?.let {
+                viewDataBinding?.countersTotalCount?.text = String.format(getString(R.string.n_items), it.count())
+                submitList(it) }
         })
         viewModel.numberOfSelectedItems.observe(viewLifecycleOwner, {
             it?.let {
                 val selectedCounterText = String.format(getString(R.string.n_selected), it)
                 txtSelectedCounters.text = selectedCounterText
             }
+        })
+
+        viewModel.screenState.observe(viewLifecycleOwner, {
+            viewDataBinding?.swipeLayout?.isEnabled = it == ScreenStates.MainScreen
         })
     }
 
@@ -114,23 +118,29 @@ class MainFragment: Fragment() {
     }
 
     private fun setSwipeToRefresh() {
-        swipeLayout.setColorSchemeColors(ContextCompat.getColor(requireContext(), R.color.orange))
-        swipeLayout.setOnRefreshListener {
+        viewDataBinding?.swipeLayout?.setColorSchemeColors(ContextCompat.getColor(requireContext(), R.color.orange))
+        viewDataBinding?.swipeLayout?.setOnRefreshListener {
             viewModel.getCounters()
         }
     }
 
     private fun stopRefreshing() {
-        swipeLayout.isRefreshing = false
+        viewDataBinding?.swipeLayout?.isRefreshing = false
     }
 
     private fun customBackPressed() {
         val callback = object : OnBackPressedCallback(true /* enabled by default */) {
             override fun handleOnBackPressed() {
-                if(viewModel.screenState.value == ScreenStates.Editing) viewModel.exitEditingState()
-                if(viewModel.screenState.value == ScreenStates.Search) {
-                    txtToolbarSearch.setText("")
-                    viewModel.exitSearchState()
+                when(viewModel.screenState.value) {
+                    ScreenStates.Editing -> viewModel.exitEditingState()
+                    ScreenStates.Search -> {
+                        txtToolbarSearch.setText("")
+                        viewModel.exitSearchState()
+                    }
+                    ScreenStates.MainScreen -> {
+                        isEnabled = false
+                        requireActivity().onBackPressed()
+                    }
                 }
                 isEnabled = false
             }
@@ -185,7 +195,6 @@ class MainFragment: Fragment() {
     }
 
     private fun submitList(list: List<Counter>) {
-        swipeLayout.isRefreshing = false
         if(adapter == null) {
             adapter = CountersAdapter(viewModel)
         }

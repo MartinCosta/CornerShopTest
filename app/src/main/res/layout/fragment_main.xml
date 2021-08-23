@@ -108,6 +108,43 @@
             app:layout_constraintVertical_bias="0.0"
             tools:visibility="gone"/>
 
+        <TextView
+            android:id="@+id/countersTotalCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.AppCompat.Small"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:layout_marginTop="@dimen/margin_normal_1"
+            android:layout_marginStart="@dimen/margin_normal_3"
+            android:layout_marginEnd="@dimen/margin_normal_1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/placeholderSearchBar"
+            tools:text="@string/n_times"/>
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/margin_normal_1"
+            android:layout_marginEnd="@dimen/margin_normal_1"
+            app:layout_constraintBottom_toTopOf="@+id/buttonAddCounter"
+            app:layout_constraintTop_toBottomOf="@+id/countersTotalCount"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/counterRv"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/margin_normal_1"
+            android:layout_marginEnd="@dimen/margin_normal_1"
+            android:layout_marginTop="@dimen/margin_normal_1"
+            android:visibility="@{viewmodel.state == States.SuccessHasData.INSTANCE ? View.VISIBLE : View.GONE}"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/counter_item"/>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonAddCounter"
             android:layout_width="wrap_content"
@@ -128,44 +165,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
-
-        <TextView
-            android:id="@+id/countersTotalCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/TextAppearance.AppCompat.Small"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:layout_marginTop="@dimen/margin_normal_1"
-            android:layout_marginStart="@dimen/margin_normal_1"
-            android:layout_marginEnd="@dimen/margin_normal_1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/placeholderSearchBar"
-            tools:text="@string/n_times"/>
-
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipeLayout"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginStart="@dimen/margin_normal_1"
-            android:layout_marginEnd="@dimen/margin_normal_1"
-            app:layout_constraintTop_toBottomOf="@+id/placeholderSearchBar"
-            app:layout_constraintBottom_toBottomOf="parent">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/counterRv"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginStart="@dimen/margin_normal_1"
-            android:layout_marginEnd="@dimen/margin_normal_1"
-            android:layout_marginTop="@dimen/margin_normal_1"
-            android:visibility="@{viewmodel.state == States.SuccessHasData.INSTANCE ? View.VISIBLE : View.GONE}"
-            android:orientation="vertical"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintTop_toBottomOf="@+id/countersTotalCount"
-            app:layout_constraintBottom_toBottomOf="parent"
-            tools:listitem="@layout/counter_item"/>
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <TextView
             android:id="@+id/tvNoResultsSearchView"

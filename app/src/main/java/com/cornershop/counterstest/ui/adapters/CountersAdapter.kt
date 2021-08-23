@@ -36,12 +36,6 @@ class CountersAdapter(private val viewModel: MainViewModel): ListAdapter<Counter
         holder.markDetach()
     }
 
-    fun setLifecycleDestroyed() {
-        viewHolders.forEach {
-            it.markDestroyed()
-        }
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CounterViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = CounterItemBinding.inflate(inflater, parent, false)
@@ -81,9 +75,7 @@ class CountersAdapter(private val viewModel: MainViewModel): ListAdapter<Counter
             lifecycleRegistry.currentState = Lifecycle.State.CREATED
         }
 
-        fun markDestroyed() {
-            lifecycleRegistry.currentState = Lifecycle.State.DESTROYED
-        }
+
         override fun getLifecycle(): Lifecycle {
             return lifecycleRegistry
         }
@@ -109,7 +101,7 @@ class CountersAdapter(private val viewModel: MainViewModel): ListAdapter<Counter
 
         private fun setDeleteItem() {
             if (viewModel.screenState.value!! == ScreenStates.Editing) {
-                if (binding.item?.isSelectedForDelete!!.not()) {
+                if (getItem(adapterPosition).isSelectedForDelete.not()) {
                     binding.container.setBackgroundResource(R.drawable.background_editing_item)
                     binding.checkDelete.visibility = View.VISIBLE
                     getItem(adapterPosition).isSelectedForDelete = true

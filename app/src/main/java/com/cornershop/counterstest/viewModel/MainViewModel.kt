@@ -14,7 +14,6 @@ import com.cornershop.counterstest.model.repository.CountersRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
 
 class MainViewModel(private val countersRepository: CountersRepository, private val counterDbRepository: CounterDbRepository): ViewModel() {
 
@@ -59,9 +58,9 @@ class MainViewModel(private val countersRepository: CountersRepository, private 
 
         })
         val isNoResults : Boolean =
-                    (searchString.length > 0 &&
+                    (searchString.isNotEmpty() &&
                     _filteredListOfCounters.value != null &&
-                    _filteredListOfCounters.value!!.size == 0)
+                            _filteredListOfCounters.value!!.isEmpty())
         _noSearchResultsIsVisible.postValue(isNoResults)
     }
 
@@ -96,6 +95,7 @@ class MainViewModel(private val countersRepository: CountersRepository, private 
             if(listFromDB.isNotEmpty()) {
                 _state.value = States.SuccessHasData
                 _listOfCounters.value = listFromDB
+                _filteredListOfCounters.value = listFromDB
             }
         }
     }
